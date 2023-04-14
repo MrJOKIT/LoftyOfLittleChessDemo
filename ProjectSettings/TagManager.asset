@@ -8,6 +8,8 @@ TagManager:
   - SoundManager
   - OneWayPlatform
   - DataManager
+  - Wall
+  - Enemy
   layers:
   - Default
   - TransparentFX

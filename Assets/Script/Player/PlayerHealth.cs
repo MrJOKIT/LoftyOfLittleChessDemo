@@ -2,23 +2,30 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
     [Header("Player Stats")] 
+    [SerializeField] private float immortalTime;
     [SerializeField] private int deathCount;
-    [SerializeField] private int maxLife;
-    [SerializeField] private int life;
+    [SerializeField] private float maxHealth;
+    [SerializeField] private float health;
     private PlayerController _playerController;
     private Animator _animator;
     private PlayerAnimation _playerAnimation;
     private InputManager _inputManager;
+    private Knockback knockBack;
+    private PlayerJump playerJump;
     private bool isDead = false;
     private bool isHurt;
-    [SerializeField] private GameObject[] lifeImage;
+    private bool immortalPlayer = false;
+    [SerializeField] private Image hpImage;
+    public Animator _animatorIcon;
 
     private float time;
     private float timer = 0.4f;
+    
     
     private void Start()
     {
@@ -26,21 +33,23 @@ public class PlayerHealth : MonoBehaviour
         _animator = GetComponent<Animator>();
         _playerAnimation = GetComponent<PlayerAnimation>();
         _inputManager = GetComponent<InputManager>();
-        
-        maxLife = _playerController.maxLifeCount;
-        life = _playerController.lifeCount;
+        knockBack = GetComponent<Knockback>();
+        playerJump = GetComponent<PlayerJump>();
+
+        maxHealth = _playerController.maxHealthCount;
+        health = _playerController.healthCount;
         
     }
 
-    public int MaxLife
+    public float MaxHelath
     {
-        get { return maxLife; }
-        set { maxLife = value; }
+        get { return maxHealth; }
+        set { maxHealth = value; }
     }
-    public int Life
+    public float Health
     {
-        get { return life; }
-        set { life = value; }
+        get { return health; }
+        set { health = value; }
     }
     public int DeathCount
     {
@@ -52,10 +61,16 @@ public class PlayerHealth : MonoBehaviour
         get { return isDead; }
         set { isDead = value; }
     }
+    
+    public bool IsHurt
+    {
+        get { return isHurt; }
+        set { isHurt = value; }
+    }
 
     private void Update()
     {
-        if (life <= 0)
+        if (health <= 0)
         {
             Dead();
         }
@@ -71,7 +86,7 @@ public class PlayerHealth : MonoBehaviour
             }
         }
         
-        UpdateLifeImage();
+        UpdateHealth();
     }
     
     private void Dead()
@@ -86,39 +101,45 @@ public class PlayerHealth : MonoBehaviour
         _playerAnimation.State = PlayerAnimation.PlayerState.Dead;
     }
 
-    public void PlayerTakeDamage()
+    public void PlayerTakeDamage(float damage)
     {
-        var lifeArray = life - 1;
-        lifeImage[lifeArray].SetActive(false);
-        life--;
+        if (!immortalPlayer)
+        {
+            _animatorIcon.SetTrigger("Hurt");
+            playerJump.SetToDefault();
+            knockBack.KnockbackHit(transform);
+            health -= damage;
 
-        _playerController.CanMove = false;
-        _playerAnimation.State = PlayerAnimation.PlayerState.Hurt;
-        isHurt = true;
-
-
+            _playerController.CanMove = false;
+            _playerAnimation.State = PlayerAnimation.PlayerState.Hurt;
+            isHurt = true;
+            immortalPlayer = true;
+            StartCoroutine(ImmortalTime());
+        }
     }
 
-    private void UpdateLifeImage()
+    private void UpdateHealth()
     {
-        if (life < maxLife)
-        {
-            for (int i = life; i < lifeImage.Length; i++)
-            {
-                lifeImage[i].SetActive(false);
-            }
-        }
-        
+        var currentHealthImage = health / maxHealth;
+        hpImage.fillAmount = currentHealthImage;
     }
     
-    public void PlayerTakeHealth()
+    public void PlayerTakeHealth(float healthUp)
     {
-        if (life < maxLife)
+        if (health < maxHealth)
         {
-            life++;
-            var lifeArray = life - 1;
-            lifeImage[lifeArray].SetActive(true);
+            health += healthUp;
+            if (health > maxHealth)
+            {
+                health = maxHealth;
+            }
             
         }
+    }
+    
+    private IEnumerator ImmortalTime()
+    {
+        yield return new WaitForSeconds(immortalTime);
+        immortalPlayer = false;
     }
 }

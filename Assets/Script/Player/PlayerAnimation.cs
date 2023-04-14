@@ -20,7 +20,8 @@ public class PlayerAnimation : MonoBehaviour
     }
 
     [SerializeField] private PlayerState state;
-    private Animator _animator;
+    private Animator _animatorKing;
+    
     private PlayerJump _playerJump;
     
     
@@ -33,7 +34,7 @@ public class PlayerAnimation : MonoBehaviour
 
     private void Start()
     {
-        _animator = GetComponent<Animator>();
+        _animatorKing = GetComponent<Animator>();
         _playerJump = GetComponent<PlayerJump>();
     }
 
@@ -42,62 +43,63 @@ public class PlayerAnimation : MonoBehaviour
         if (state == PlayerState.Idle)
         {
             SetFalseAllAnimatorBoolean();
-            _animator.SetBool("IsIdle",true);
+            _animatorKing.SetBool("IsIdle",true);
         }
         else if (state == PlayerState.Walk)
         {
             SetFalseAllAnimatorBoolean();
-            _animator.SetBool("IsWalking",true);
+            _animatorKing.SetBool("IsWalking",true);
         }
         else if (state == PlayerState.Jump && !_playerJump.IsGround)
         {
             SetFalseAllAnimatorBoolean();
-            _animator.SetBool("IsJumping",true);
+            _animatorKing.SetBool("IsJumping",true);
         }
         else if (state == PlayerState.Fall && !_playerJump.IsGround)
         {
             SetFalseAllAnimatorBoolean();
-            _animator.SetBool("IsFalling",true);
+            _animatorKing.SetBool("IsFalling",true);
         }
         else if (state == PlayerState.Attack)
         {
             SetFalseAllAnimatorBoolean();
-            _animator.ResetTrigger("NormalAttack");
-            _animator.SetTrigger("NormalAttack");
+            _animatorKing.ResetTrigger("NormalAttack");
+            _animatorKing.SetTrigger("NormalAttack");
         }
         else if (state == PlayerState.HeavyAttack)
         {
             SetFalseAllAnimatorBoolean();
-            _animator.SetBool("HeavyAttack",true);
+            _animatorKing.SetBool("HeavyAttack",true);
             /*_animator.ResetTrigger("HeavyAttack");
             _animator.SetTrigger("HeavyAttack");*/
         }
         else if (state == PlayerState.Dash)
         {
             SetFalseAllAnimatorBoolean();
-            _animator.ResetTrigger("IsDashing");
-            _animator.SetTrigger("IsDashing");
+            _animatorKing.ResetTrigger("IsDashing");
+            _animatorKing.SetTrigger("IsDashing");
         }
         else if (state == PlayerState.Hurt)
         {
             SetFalseAllAnimatorBoolean();
-            _animator.SetBool("IsHurt",true);
+            _animatorKing.SetBool("IsHurt",true);
+            
         }
         else if (state == PlayerState.Dead)
         {
             SetFalseAllAnimatorBoolean();
-            _animator.SetBool("IsDead",true);
+            _animatorKing.SetBool("IsDead",true);
         }
     }
 
     public void SetFalseAllAnimatorBoolean()
     {
-        _animator.SetBool("IsIdle",false);
-        _animator.SetBool("IsWalking",false);
-        _animator.SetBool("IsJumping",false);
-        _animator.SetBool("IsFalling",false);
-        _animator.SetBool("HeavyAttack",false);
-        _animator.SetBool("IsDead",false);
-        _animator.SetBool("IsHurt",false);
+        _animatorKing.SetBool("IsIdle",false);
+        _animatorKing.SetBool("IsWalking",false);
+        _animatorKing.SetBool("IsJumping",false);
+        _animatorKing.SetBool("IsFalling",false);
+        _animatorKing.SetBool("HeavyAttack",false);
+        _animatorKing.SetBool("IsDead",false);
+        _animatorKing.SetBool("IsHurt",false);
     }
 }

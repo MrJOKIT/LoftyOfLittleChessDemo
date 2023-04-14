@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerMenu : Menu
+public class PlayerMenu : MonoBehaviour
 {
     [SerializeField] private PlayerHealth _playerHealth;
     private PlayerController _playerController;
+    public GameObject menuPanel;
 
     private void Start()
     {
@@ -17,7 +18,7 @@ public class PlayerMenu : Menu
     public void ReCheckPoint()
     {
         _playerHealth.IsDead = false;
-        _playerHealth.Life = _playerHealth.MaxLife;
+        _playerHealth.Health = _playerHealth.MaxHelath;
         Time.timeScale = 1f;
         DataPersistenceManager.instance.SaveGame();
         DataPersistenceManager.instance.LoadGame();
@@ -28,5 +29,24 @@ public class PlayerMenu : Menu
         Time.timeScale = 1f;
         DataPersistenceManager.instance.SaveGame();
         SceneManager.LoadSceneAsync("MainMenu");
+    }
+
+    public void Option(GameObject optionPanel)
+    {
+        menuPanel.SetActive(false);
+        optionPanel.SetActive(true);
+        Cursor.visible = true;
+    }
+
+    public void CloseMenu(GameObject menu)
+    {
+        menu.SetActive(false);
+    }
+
+    public void BackMenu(GameObject thisMenu)
+    {
+        thisMenu.SetActive(false);
+        menuPanel.SetActive(true);
+        Cursor.visible = true;
     }
 }

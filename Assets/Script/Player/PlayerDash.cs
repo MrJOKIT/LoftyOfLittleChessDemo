@@ -27,6 +27,7 @@ public class PlayerDash : MonoBehaviour
     private PlayerAnimation _playerAnimation;
     private Animator _animator;
     private PlayerMana _playerMana;
+    private PlayerHealth playerHealth;
 
     public bool CanDash
     {
@@ -47,6 +48,7 @@ public class PlayerDash : MonoBehaviour
         _animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         _playerMana = GetComponent<PlayerMana>();
+        playerHealth = GetComponent<PlayerHealth>();
     }
 
     private void Update()
@@ -112,6 +114,18 @@ public class PlayerDash : MonoBehaviour
                 isDashing = false;
                 _playerController.CanMove = true;
             }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Enemy"))
+        {
+            _animator.SetBool("IsDash",false);
+            rb.velocity = Vector2.zero;
+            isDashing = false;
+            //_playerAnimation.State = PlayerAnimation.PlayerState.Hurt;
+            //playerHealth.IsHurt = true;
         }
     }
 }

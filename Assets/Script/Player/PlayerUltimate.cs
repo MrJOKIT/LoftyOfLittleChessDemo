@@ -13,8 +13,8 @@ public class PlayerUltimate : MonoBehaviour
     [SerializeField] private float ultimatePoint;
     private PlayerController _playerController;
     private PlayerHealth _playerHealth;
-    private float time;
-    private float timer = 0.38f;
+    //private float time;
+    //private float timer = 0.38f;
 
     private void Start()
     {
@@ -56,7 +56,7 @@ public class PlayerUltimate : MonoBehaviour
         if (ultimatePoint >= 1 && Input.GetKeyDown(KeyCode.Q))
         {
             ultimatePoint = 0;
-            _playerHealth.PlayerTakeHealth();
+            _playerHealth.PlayerTakeHealth(10);
             Debug.Log("Ultimate Skill!!!!");
         }
         else if (ultimatePoint > 1)

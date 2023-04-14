@@ -9,7 +9,7 @@ public class HealTest : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            col.gameObject.GetComponent<PlayerHealth>().PlayerTakeHealth();
+            col.gameObject.GetComponent<PlayerHealth>().PlayerTakeHealth(10);
         }
     }
 }

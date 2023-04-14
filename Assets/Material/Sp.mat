@@ -97,7 +97,7 @@ Material:
     m_Floats:
     - PixelSnap: 0
     - _AddColorContrast: 0.5
-    - _AddColorFade: 0.315
+    - _AddColorFade: 0.01
     - _AddHueBrightness: 2
     - _AddHueContrast: 1
     - _AddHueFade: 1
@@ -249,7 +249,7 @@ Material:
     - _InnerOutlineWidth: 0.02
     - _IsText: 0
     - _MetalContrast: 2
-    - _MetalFade: 0.171
+    - _MetalFade: 0.1
     - _MetalHighlightContrast: 2
     - _MetalHighlightDensity: 1
     - _OuterOutlineDistortionToggle: 0

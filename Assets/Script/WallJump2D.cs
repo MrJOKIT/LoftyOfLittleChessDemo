@@ -6,7 +6,7 @@ public class WallJump2D : MonoBehaviour
     public LayerMask wallLayer;
 
     private Rigidbody2D rb;
-    private CapsuleCollider2D collider;
+    private new CapsuleCollider2D collider;
     private bool isTouchingWall;
 
     private void Start()

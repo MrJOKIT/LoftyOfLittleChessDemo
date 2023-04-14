@@ -27,10 +27,12 @@ public class InputManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape) && !_menuActive && !_playerHealth.IsDead)
         {
+            Cursor.visible = true;
             OpenMenu();
         }
         else if (Input.GetKeyDown(KeyCode.Escape) && _menuActive && !_playerHealth.IsDead)
         {
+            Cursor.visible = false;
             CloseMenu();
         }
         else

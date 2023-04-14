@@ -12,11 +12,11 @@ public class Menu : MonoBehaviour
 
     protected virtual void OnEnable()
     {
-        SetFirstSelected(firstSelected);
+        //SetFirstSelected(firstSelected);
     }
 
     public void SetFirstSelected(Button firstSelectedButton)
     {
-        firstSelectedButton.Select();
+        //firstSelectedButton.Select();
     }
 }

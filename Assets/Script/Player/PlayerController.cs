@@ -16,8 +16,8 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     [Header("Player Setting")]
     private bool inCombat;
 
-    public int maxLifeCount;
-    public int lifeCount;
+    public float maxHealthCount;
+    public float healthCount;
     public float maxMpCount;
     public float mpCount;
     public float ultimatePoint;
@@ -89,20 +89,20 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     
     public void SaveData(GameData data)
     {
-        data.maxLifeCount = _playerHealth.MaxLife;
-        data.lifeCount = _playerHealth.Life;
+        data.maxHealthCount = _playerHealth.MaxHelath;
+        data.healthCount = _playerHealth.Health;
         data.maxMpCount = _playerMana.MaxMp;
         data.mpCount = _playerMana.Mp;
         data.maxUltimatePoint = _playerUltimate.MaxUltimatePoint;
         data.ultimatePoint = _playerUltimate.UltimatePoint;
-        data.lastCheckPoint = lastCheckPoint;
+        data.lastCheckPoint = transform.position;
         data.deathCount = _playerHealth.DeathCount; 
     }
     public void LoadData(GameData data)
     {
         lastCheckPoint = data.lastCheckPoint;
-        maxLifeCount = data.maxLifeCount;
-        lifeCount = data.lifeCount;
+        maxHealthCount = data.maxHealthCount;
+        healthCount = data.healthCount;
         maxMpCount = data.maxMpCount;
         mpCount = data.mpCount;
         ultimatePoint = data.ultimatePoint;

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class SaveSlotMenu : Menu
+public class SaveSlotMenu : MonoBehaviour
 {
 
     [Header("Menu Navigation")] 
@@ -121,7 +121,7 @@ public class SaveSlotMenu : Menu
         }
 
         Button firstSelectedButton = firstSelected.GetComponent<Button>();
-        this.SetFirstSelected(firstSelectedButton);
+        //this.SetFirstSelected(firstSelectedButton);
     }
 
     public void DeActivateMenu()

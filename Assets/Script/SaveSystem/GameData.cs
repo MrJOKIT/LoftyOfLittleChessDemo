@@ -8,8 +8,8 @@ public class GameData
 {
     public long lastUpdated;
     public Vector3 lastCheckPoint;
-    public int maxLifeCount;
-    public int lifeCount;
+    public float maxHealthCount;
+    public float healthCount;
     public float maxMpCount;
     public float mpCount;
     public float maxUltimatePoint;
@@ -19,8 +19,8 @@ public class GameData
 
     public GameData()
     {
-        this.maxLifeCount = 5;
-        this.lifeCount = 5;
+        this.maxHealthCount = 100;
+        this.healthCount = 100;
         this.maxMpCount = 1;
         this.mpCount = 0;
         this.maxUltimatePoint = 1;

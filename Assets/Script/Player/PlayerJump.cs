@@ -15,6 +15,7 @@ public class PlayerJump : MonoBehaviour
     private bool _isGrounded = false;
     private bool checkJumpBug = false;
     private bool fallingLong = false;
+    private bool jumpBug;
     private Rigidbody2D rb;
     private Animator _animator;
     private PlayerController _playerController;
@@ -24,6 +25,12 @@ public class PlayerJump : MonoBehaviour
 
     private float time;
     private float timer = 0.5f;
+
+    private float coyoteTime = 0.2f;
+    private float coyoteTimeCounter;
+
+    private float jumpBufferTime = 0.2f;
+    private float jumpBufferCounter;
     //private PlayerGrappling _playerGrappling;
 
     public bool IsGround
@@ -57,6 +64,15 @@ public class PlayerJump : MonoBehaviour
             {
                 SetAnimationToFalse();
             }
+
+            if (IsGround)
+            {
+                coyoteTimeCounter = coyoteTime;
+            }
+            else
+            {
+                coyoteTimeCounter -= Time.deltaTime;
+            }
         
             if (_isGrounded && !canJump)
             {
@@ -65,6 +81,15 @@ public class PlayerJump : MonoBehaviour
             else if (!_isGrounded)
             {
                 checkJumpBug = false;
+            }
+
+            if (Input.GetButtonDown("Jump"))
+            {
+                jumpBufferCounter = jumpBufferTime;
+            }
+            else
+            {
+                jumpBufferCounter -= Time.deltaTime;
             }
         
             if (checkJumpBug)
@@ -81,6 +106,20 @@ public class PlayerJump : MonoBehaviour
                     time = 0f;
                 }
             }
+            /*else if (_isJumping && !_isGrounded && !canJump && !_isDoubleJumping && !checkJumpBug)
+            {
+                time = 5f;
+                time += Time.deltaTime;
+                if (time > timer)
+                {
+                    checkJumpBug = false;
+                    _isGrounded = true;
+                    canJump = true;
+                    _isJumping = false;
+                    _isDoubleJumping = false;
+                    time = 0f;
+                }
+            }*/
             else if (!checkJumpBug && !fallingLong)
             {
                 time = 0f;
@@ -92,15 +131,17 @@ public class PlayerJump : MonoBehaviour
     void Jump()
     {
 
-        if (canJump == true && _isDoubleJumping == false && Input.GetAxis("Jump") > 0)
+        if (coyoteTimeCounter > 0f && canJump == true && _isDoubleJumping == false && jumpBufferCounter > 0f)
         {
             checkJumpBug = false;
             fallingLong = false;
             rb.gravityScale = 2;
+            jumpBug = true;
             canJump = false;
             _isJumping = true;
             _isDoubleJumping = true;
             rb.velocity = Vector2.up * jumpForce;
+            jumpBufferCounter = 0f;
             SoundManager.instace.Play(SoundManager.SoundName.Jump);
             
         }
@@ -111,10 +152,13 @@ public class PlayerJump : MonoBehaviour
             fallingLong = false;
             time = 0f;
             rb.gravityScale = 2;
+            jumpBug = true;
             _isDoubleJumping = false;
             rb.velocity = Vector2.up * jumpForce;
+            coyoteTimeCounter = 0f;
             SoundManager.instace.Play(SoundManager.SoundName.DoubleJump);
         }
+        
 
         if (rb.velocity.y > 0 && !_playerDash.IsDashing)
         {
@@ -124,7 +168,6 @@ public class PlayerJump : MonoBehaviour
         {
             _playerAnimation.State = PlayerAnimation.PlayerState.Fall;
         }
-        
     }
     
     private void OnCollisionEnter2D(Collision2D col)
@@ -142,6 +185,7 @@ public class PlayerJump : MonoBehaviour
                 _isGrounded = true;
                 _isJumping = false;
                 _isDoubleJumping = false;
+                jumpBug = false;
             }
         }
         
@@ -164,6 +208,20 @@ public class PlayerJump : MonoBehaviour
     {
         _animator.SetBool("IsJumping",false);
         
+    }
+
+    public void SetToDefault()
+    {
+        _playerAnimation.SetFalseAllAnimatorBoolean();
+        _animator.SetBool("IsGround",true);
+        fallingLong = false;
+        checkJumpBug = false;
+        rb.gravityScale = 2f;
+        canJump = true;
+        _isGrounded = true;
+        _isJumping = false;
+        _isDoubleJumping = false;
+        jumpBug = false;
     }
 
 

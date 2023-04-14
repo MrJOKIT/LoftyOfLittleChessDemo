@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MainMenu : Menu
+public class MainMenu : MonoBehaviour
 {
     [Header("Menu")]
     [SerializeField] private GameObject settingPanel;
@@ -63,7 +63,7 @@ public class MainMenu : Menu
 
     public void OnContinueClciked()
     {
-        DisableMenuButton();
+        //DisableMenuButton();
         DataPersistenceManager.instance.SaveGame();
         SceneManager.LoadSceneAsync("World");
     }
