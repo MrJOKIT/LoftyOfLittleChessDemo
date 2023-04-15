@@ -22,6 +22,7 @@ public class PlayerHealth : MonoBehaviour
     private bool immortalPlayer = false;
     [SerializeField] private Image hpImage;
     public Animator _animatorIcon;
+    public PlayerMenu playerMenu;
 
     private float time;
     private float timer = 0.4f;
@@ -96,7 +97,7 @@ public class PlayerHealth : MonoBehaviour
             _animator.SetTrigger("Dead");
             isDead = true;
         }
-        _inputManager.OpenMenu();
+        playerMenu.OpenMenu();
         _playerController.CanMove = false;
         _playerAnimation.State = PlayerAnimation.PlayerState.Dead;
     }

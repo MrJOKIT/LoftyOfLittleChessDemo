@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,9 +40,12 @@ public class PlayerChangeChracter : MonoBehaviour
 
     private float changeTime;
     [Header("Change Time")]
-    [SerializeField] private float changeTimeCounter = 1f;
+    [SerializeField] private float changeTimeCounter;
     [SerializeField] private Image changeImageKing;
     [SerializeField] private Image changeImageQueen;
+    [SerializeField] private TextMeshProUGUI countText;
+    private float cooldown;
+    
     
     private bool isKing;
 
@@ -56,29 +60,35 @@ public class PlayerChangeChracter : MonoBehaviour
         isKing = true;
         playerAnimator = GetComponent<Animator>();
         playerHealth = GetComponent<PlayerHealth>();
+        cooldown = changeTimeCounter;
+        
     }
 
     private void Update()
     {
+        
         changeTime += Time.deltaTime;
         changeImageKing.fillAmount = changeTime / changeTimeCounter;
         changeImageQueen.fillAmount = changeTime / changeTimeCounter;
-        var materailChange = changeTime / changeTimeCounter;
+        /*var materailChange = changeTime / changeTimeCounter;
         var materailCurrent = materailChange / 2f;
         if (materailCurrent >= 0.4)
         {
             materailCurrent = 0.4f;
         }
-        skillChange.SetFloat("_AddColorFade", materailCurrent);
-
+        skillChange.SetFloat("_AddColorFade", materailCurrent);*/
+        
         if (changeTime >= changeTimeCounter)
         {
-            skillChangeBack.SetFloat("_FlameRadius",0.4f);
+            //skillChangeBack.SetFloat("_FlameRadius",0.4f);
+            countText.text = "Switch";
             skillChangeBack.SetFloat("_GlitchFade",0.05f);
         }
         else
         {
-            skillChangeBack.SetFloat("_FlameRadius",5);
+            //skillChangeBack.SetFloat("_FlameRadius",5);
+            cooldown -= Time.deltaTime;
+            countText.text = "" + cooldown;
             skillChangeBack.SetFloat("_GlitchFade",0);
         }
         
@@ -90,12 +100,14 @@ public class PlayerChangeChracter : MonoBehaviour
                 isKing = false;
                 Instantiate(queenCutIn, cutInPos.position, Quaternion.identity,cutInPos);
                 changeTime = 0f;
+                cooldown = changeTimeCounter;
             }
             else
             {
                 isKing = true;
                 Instantiate(kingCutIn, cutInPos.position, Quaternion.identity,cutInPos);
                 changeTime = 0f;
+                cooldown = changeTimeCounter;
             }
         }
         

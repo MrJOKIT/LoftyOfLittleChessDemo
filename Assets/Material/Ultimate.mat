@@ -11,6 +11,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: 6e2eed3f9017db447814cf8cfbfa4fbe, type: 3}
   m_ValidKeywords:
   - _ENABLEADDCOLOR_ON
+  - _ENABLEPOISON_ON
   - _ENABLERAINBOW_ON
   - _SHADERSPACE_UI_ELEMENT
   - _TIMESETTINGS_LINEAR_DEFAULT
@@ -181,7 +182,7 @@ Material:
     - _EnableMetal: 0
     - _EnableOuterOutline: 0
     - _EnablePixelate: 0
-    - _EnablePoison: 0
+    - _EnablePoison: 1
     - _EnableRainbow: 1
     - _EnableRecolor: 0
     - _EnableSaturation: 0

@@ -206,7 +206,7 @@ Material:
     - _FlameBrightness: 9.58
     - _FlameNoiseFactor: 2.5
     - _FlameNoiseHeightFactor: 1.5
-    - _FlameRadius: 0.4
+    - _FlameRadius: 5
     - _FlameSmooth: 2
     - _FrozenContrast: 2
     - _FrozenFade: 1

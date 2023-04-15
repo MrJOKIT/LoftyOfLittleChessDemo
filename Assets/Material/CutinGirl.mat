@@ -10,6 +10,8 @@ Material:
   m_Name: CutinGirl
   m_Shader: {fileID: 4800000, guid: 6e2eed3f9017db447814cf8cfbfa4fbe, type: 3}
   m_ValidKeywords:
+  - _ENABLEADDCOLOR_ON
+  - _ENABLEALPHATINT_ON
   - _SHADERSPACE_UI_ELEMENT
   - _TIMESETTINGS_LINEAR_DEFAULT
   - _UBERFADING_NONE
@@ -94,15 +96,15 @@ Material:
     m_Ints: []
     m_Floats:
     - _AddColorContrast: 10
-    - _AddColorFade: 0.2
+    - _AddColorFade: 0.08
     - _AddHueBrightness: 2
     - _AddHueContrast: 1
     - _AddHueFade: 1
     - _AddHueSaturation: 1
     - _AddHueSpeed: 1
-    - _AlphaTintFade: 1
-    - _AlphaTintMinAlpha: 0.05
-    - _AlphaTintPower: 1
+    - _AlphaTintFade: 0.5
+    - _AlphaTintMinAlpha: 0.01
+    - _AlphaTintPower: 0.8
     - _BlackTintFade: 1
     - _BlackTintPower: 2
     - _Brightness: 1
@@ -149,9 +151,9 @@ Material:
     - _DirectionalGlowFadeNoiseFactor: 0.2
     - _DirectionalGlowFadeRotation: 0
     - _DirectionalGlowFadeWidth: 0.1
-    - _EnableAddColor: 0
+    - _EnableAddColor: 1
     - _EnableAddHue: 0
-    - _EnableAlphaTint: 0
+    - _EnableAlphaTint: 1
     - _EnableBlackTint: 0
     - _EnableBrightness: 0
     - _EnableBurn: 0
@@ -349,7 +351,7 @@ Material:
     - _WindXPosition: 0
     m_Colors:
     - _AddColorColor: {r: 5.3403134, g: 5.3403134, b: 5.3403134, a: 0}
-    - _AlphaTintColor: {r: 23.96863, g: 1.254902, b: 23.96863, a: 0}
+    - _AlphaTintColor: {r: 1.2549016, g: 20.440685, b: 23.968628, a: 0}
     - _BlackTintColor: {r: 0, g: 0, b: 0, a: 0}
     - _BurnEdgeColor: {r: 11.98431, g: 1.129412, b: 0.1254902, a: 0}
     - _BurnEdgeNoiseScale: {r: 0.3, g: 0.3, b: 0, a: 0}

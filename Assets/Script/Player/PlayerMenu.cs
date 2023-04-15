@@ -7,12 +7,39 @@ using UnityEngine.SceneManagement;
 public class PlayerMenu : MonoBehaviour
 {
     [SerializeField] private PlayerHealth _playerHealth;
+    [SerializeField] private GameObject playerMenu;
+    private bool _menuActive;
     private PlayerController _playerController;
-    public GameObject menuPanel;
+    //public GameObject menuPanel;
 
+    
+    private void Awake()
+    {
+        _menuActive = false;
+        playerMenu.SetActive(false);
+    }
     private void Start()
     {
         _playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && !_menuActive && !_playerHealth.IsDead)
+        {
+            Cursor.visible = true;
+            OpenMenu();
+        }
+        else if (Input.GetKeyDown(KeyCode.Escape) && _menuActive && !_playerHealth.IsDead)
+        {
+            Cursor.visible = false;
+            
+            CloseMenu();
+        }
+        else
+        {
+            return;
+        }
     }
 
     public void ReCheckPoint()
@@ -33,20 +60,31 @@ public class PlayerMenu : MonoBehaviour
 
     public void Option(GameObject optionPanel)
     {
-        menuPanel.SetActive(false);
+        _menuActive = false;
+        playerMenu.SetActive(false);
         optionPanel.SetActive(true);
         Cursor.visible = true;
     }
-
-    public void CloseMenu(GameObject menu)
-    {
-        menu.SetActive(false);
-    }
-
+    
     public void BackMenu(GameObject thisMenu)
     {
         thisMenu.SetActive(false);
-        menuPanel.SetActive(true);
-        Cursor.visible = true;
+        
+    }
+    
+    public void OpenMenu()
+    {
+        Cursor.visible = false;
+        _menuActive = true;
+        playerMenu.SetActive(true);
+        //playerMenu.GetComponent<Animator>().SetBool("Open",true);
+    }
+
+    public void CloseMenu()
+    {
+        Cursor.visible = false;
+        _menuActive = false;
+        playerMenu.SetActive(false);
+        //playerMenu.GetComponent<Animator>().SetBool("Open",false);
     }
 }
