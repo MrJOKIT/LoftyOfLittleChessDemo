@@ -8,11 +8,15 @@ using UnityEngine.UI;
 public class PlayerUltimate : MonoBehaviour
 {
     [SerializeField] private TMP_Text ultimateInput;
-    [SerializeField] private Image ultimateImage;
+    [SerializeField] private Image kingUltimateImage;
+    [SerializeField] private Image queenUltimateImage;
     [SerializeField] private float maxUltimatePoint;
     [SerializeField] private float ultimatePoint;
     private PlayerController _playerController;
     private PlayerHealth _playerHealth;
+    [SerializeField] private Material material;
+    [SerializeField] private Material backMaterial;
+    private int fadePropertyID;
     //private float time;
     //private float timer = 0.38f;
 
@@ -21,6 +25,7 @@ public class PlayerUltimate : MonoBehaviour
         _playerController = GetComponent<PlayerController>();
         ultimatePoint = _playerController.ultimatePoint;
         _playerHealth = GetComponent<PlayerHealth>();
+        fadePropertyID = Shader.PropertyToID("_RainbowFade");
     }
 
     public float MaxUltimatePoint
@@ -42,15 +47,22 @@ public class PlayerUltimate : MonoBehaviour
 
     private void UltimateSkill()
     {
-        ultimateImage.fillAmount = ultimatePoint;
+        kingUltimateImage.fillAmount = ultimatePoint;
+        queenUltimateImage.fillAmount = ultimatePoint;
+
+        var currentFade = kingUltimateImage.fillAmount / 2.5f;
+        material.SetFloat("_AddColorFade",currentFade);
         if (ultimatePoint >= 1)
         {
             ultimatePoint = 1f;
-            ultimateInput.text = "Q";
+            material.SetFloat("_RainbowFade",1f);
+            backMaterial.SetFloat("_GlitchFade",0.25f);
+            //ultimateInput.text = "Q";
         }
         else
         {
-            ultimateInput.text = "";
+            material.SetFloat("_RainbowFade",0f);
+            backMaterial.SetFloat("_GlitchFade",0);
         }
 
         if (ultimatePoint >= 1 && Input.GetKeyDown(KeyCode.Q))

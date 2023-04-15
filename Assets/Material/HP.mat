@@ -96,7 +96,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AddColorContrast: 0.5
-    - _AddColorFade: 0.01
+    - _AddColorFade: 0.1
     - _AddHueBrightness: 2
     - _AddHueContrast: 1
     - _AddHueFade: 1
@@ -202,10 +202,10 @@ Material:
     - _EnableUVScroll: 0
     - _EnableVibrate: 0
     - _EnableWind: 0
-    - _FlameBrightness: 10
+    - _FlameBrightness: 1.83
     - _FlameNoiseFactor: 2.5
     - _FlameNoiseHeightFactor: 1.5
-    - _FlameRadius: 0.2
+    - _FlameRadius: 0.4
     - _FlameSmooth: 2
     - _FrozenContrast: 2
     - _FrozenFade: 1

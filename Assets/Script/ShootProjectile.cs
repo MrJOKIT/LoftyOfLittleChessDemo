@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ShootProjectile : MonoBehaviour
@@ -9,10 +10,18 @@ public class ShootProjectile : MonoBehaviour
     [Tooltip("The position where the projectile will be instantiated.")]
     public Transform spawnPosition;
 
+    [SerializeField] private float throwCost;
+    private PlayerMana playerMana;
+    private void Start()
+    {
+        playerMana = GetComponent<PlayerMana>();
+    }
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F) && playerMana.Mp >= throwCost)
         {
+            playerMana.Mp -= throwCost;
             LaunchProjectile();
         }
     }

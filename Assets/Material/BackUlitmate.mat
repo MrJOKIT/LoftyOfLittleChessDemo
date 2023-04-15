@@ -7,11 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Ultimate
+  m_Name: BackUlitmate
   m_Shader: {fileID: 4800000, guid: 6e2eed3f9017db447814cf8cfbfa4fbe, type: 3}
   m_ValidKeywords:
-  - _ENABLEADDCOLOR_ON
-  - _ENABLERAINBOW_ON
+  - _ENABLESQUISH2_ON
   - _SHADERSPACE_UI_ELEMENT
   - _TIMESETTINGS_LINEAR_DEFAULT
   - _UBERFADING_NONE
@@ -97,7 +96,7 @@ Material:
     m_Floats:
     - PixelSnap: 0
     - _AddColorContrast: 0.5
-    - _AddColorFade: 0.4
+    - _AddColorFade: 1
     - _AddHueBrightness: 2
     - _AddHueContrast: 1
     - _AddHueFade: 1
@@ -152,7 +151,7 @@ Material:
     - _DirectionalGlowFadeNoiseFactor: 0.2
     - _DirectionalGlowFadeRotation: 0
     - _DirectionalGlowFadeWidth: 0.1
-    - _EnableAddColor: 1
+    - _EnableAddColor: 0
     - _EnableAddHue: 0
     - _EnableAlphaTint: 0
     - _EnableBlackTint: 0
@@ -182,7 +181,7 @@ Material:
     - _EnableOuterOutline: 0
     - _EnablePixelate: 0
     - _EnablePoison: 0
-    - _EnableRainbow: 1
+    - _EnableRainbow: 0
     - _EnableRecolor: 0
     - _EnableSaturation: 0
     - _EnableShiftHue: 0
@@ -195,7 +194,7 @@ Material:
     - _EnableSourceGlowDissolve: 0
     - _EnableSplitToning: 0
     - _EnableSqueeze: 0
-    - _EnableSquish2: 0
+    - _EnableSquish2: 1
     - _EnableStrongTint: 0
     - _EnableUVDistort: 0
     - _EnableUVRotate: 0
@@ -221,7 +220,7 @@ Material:
     - _FullGlowDissolveFade: 0.5
     - _FullGlowDissolveWidth: 0.5
     - _GlitchBrightness: 4
-    - _GlitchFade: 0.5
+    - _GlitchFade: 0.25
     - _GlitchHueSpeed: 1
     - _GlitchMaskMin: 0.4
     - _HalftoneFade: 1
@@ -233,7 +232,7 @@ Material:
     - _HologramDistortionOffset: 0.5
     - _HologramDistortionScale: 10
     - _HologramDistortionSpeed: 2
-    - _HologramFade: 0.226
+    - _HologramFade: 1
     - _HologramLineFrequency: 500
     - _HologramLineGap: 3
     - _HologramLineSpeed: 0.01
@@ -269,7 +268,7 @@ Material:
     - _RainbowFade: 1
     - _RainbowNoiseFactor: 0.2
     - _RainbowSaturation: 1
-    - _RainbowSpeed: 0.5
+    - _RainbowSpeed: 1
     - _RecolorFade: 1
     - _RectHeight: 100
     - _RectWidth: 100
@@ -284,7 +283,7 @@ Material:
     - _ShineSaturation: 0.5
     - _ShineScale: 0.05
     - _ShineSmoothness: 2
-    - _ShineSpeed: 1
+    - _ShineSpeed: 0.1
     - _ShineWidth: 0.1
     - _SineGlowContrast: 1
     - _SineGlowFade: 1
@@ -351,7 +350,7 @@ Material:
     - _WindSquishWindFactor: 0
     - _WindXPosition: 0
     m_Colors:
-    - _AddColorColor: {r: 4.146878, g: 0, b: 0, a: 0}
+    - _AddColorColor: {r: 4, g: 0, b: 0, a: 0}
     - _AlphaTintColor: {r: 23.96863, g: 1.254902, b: 23.96863, a: 0}
     - _BlackTintColor: {r: 1, g: 0, b: 0, a: 0}
     - _BurnEdgeColor: {r: 11.98431, g: 1.129412, b: 0.1254902, a: 0}
@@ -396,7 +395,7 @@ Material:
     - _FullDistortionNoiseScale: {r: 0.5, g: 0.5, b: 0, a: 0}
     - _FullGlowDissolveEdgeColor: {r: 11.98431, g: 0.627451, b: 0.627451, a: 0}
     - _FullGlowDissolveNoiseScale: {r: 0.1, g: 0.1, b: 0, a: 0}
-    - _GlitchDistortion: {r: 0.1, g: 0, b: 0, a: 0}
+    - _GlitchDistortion: {r: 0.27, g: 0, b: 0, a: 0}
     - _GlitchDistortionScale: {r: 0, g: 3, b: 0, a: 0}
     - _GlitchDistortionSpeed: {r: 0, g: 1, b: 0, a: 0}
     - _GlitchMaskScale: {r: 0, g: 0.2, b: 0, a: 0}
@@ -423,7 +422,7 @@ Material:
     - _OuterOutlineDistortionIntensity: {r: 0.01, g: 0.01, b: 0, a: 0}
     - _OuterOutlineNoiseScale: {r: 4, g: 4, b: 0, a: 0}
     - _OuterOutlineNoiseSpeed: {r: 0, g: 0.1, b: 0, a: 0}
-    - _PoisonColor: {r: 2.9960783, g: 0.3294117, b: 0.685726, a: 0}
+    - _PoisonColor: {r: 0.3137255, g: 2.996078, b: 0.3137255, a: 0}
     - _PoisonNoiseScale: {r: 0.2, g: 0.2, b: 0, a: 0}
     - _PoisonNoiseSpeed: {r: 0, g: -0.2, b: 0, a: 0}
     - _RainbowCenter: {r: 0, g: 0, b: 0, a: 0}
