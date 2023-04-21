@@ -22,7 +22,7 @@ public class EnemySimpleMove : MonoBehaviour
     public float stopDistance = 1f;
 
     [Tooltip("The bullet prefab to shoot at the player.")]
-    public GameObject bulletPrefab;
+    public Rigidbody2D bulletPrefab;
 
     [Tooltip("The speed at which the bullet travels.")]
     public float bulletSpeed = 10f;
@@ -82,8 +82,11 @@ public class EnemySimpleMove : MonoBehaviour
                 // Shoot a bullet at the player
                 if (Time.time - lastShotTime > shootDelay)
                 {
-                    GameObject bullet = Instantiate(bulletPrefab, shootPosition.position, Quaternion.identity);
-                    bullet.GetComponent<Rigidbody2D>().velocity = (playerTransform.position - shootPosition.position).normalized * bulletSpeed;
+                    Vector2 projectileVelocity = 
+                        CalculateProjectileVelocity(shootPosition.position, playerTransform.position, bulletSpeed);
+                    Rigidbody2D bullet = Instantiate(bulletPrefab, shootPosition.position, Quaternion.identity);
+                    bullet.velocity = projectileVelocity;
+                    //bullet.GetComponent<Rigidbody2D>().velocity = (playerTransform.position - shootPosition.position).normalized * bulletSpeed;
                     lastShotTime = Time.time;
                 }
             }
@@ -152,4 +155,21 @@ public class EnemySimpleMove : MonoBehaviour
             mustTurn = true;
         }
     }
+    
+    Vector2 CalculateProjectileVelocity( Vector2 origin , Vector2 target, float time)
+    {
+        Vector2 distance = target - origin;
+
+        float disX = distance.x;
+        float disY = distance.y;
+
+        float velocityX = disX / time;
+        float velocityY = disY / time + 0.5f * Mathf.Abs(Physics2D.gravity.y) * time;
+
+        Vector2 result = new Vector2(velocityX, velocityY);
+
+        return result;
+        
+    }
+    
 }

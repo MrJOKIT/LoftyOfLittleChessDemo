@@ -12,14 +12,16 @@ public class ShootProjectile : MonoBehaviour
 
     [SerializeField] private float throwCost;
     private PlayerMana playerMana;
+    private SoundManager soundManager;
     private void Start()
     {
         playerMana = GetComponent<PlayerMana>();
+        soundManager = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<SoundManager>();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F) && playerMana.Mp >= throwCost)
+        if (Input.GetKeyDown(KeyCode.I) && playerMana.Mp >= throwCost)
         {
             playerMana.Mp -= throwCost;
             LaunchProjectile();
@@ -28,6 +30,7 @@ public class ShootProjectile : MonoBehaviour
 
     private void LaunchProjectile()
     {
+        SoundManager.instace.Play(SoundManager.SoundName.ThrowSpear);
         GameObject projectile = Instantiate(projectilePrefab, spawnPosition.position, transform.rotation);
         Rigidbody2D rb = projectile.GetComponent<Rigidbody2D>();
         rb.velocity = transform.forward * launchSpeed;

@@ -96,7 +96,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AddColorContrast: 0.5
-    - _AddColorFade: 0.1
+    - _AddColorFade: 0.252
     - _AddHueBrightness: 2
     - _AddHueContrast: 1
     - _AddHueFade: 1
@@ -304,9 +304,9 @@ Material:
     - _SourceAlphaDissolveInvert: 0
     - _SourceAlphaDissolveNoiseFactor: 0.2
     - _SourceAlphaDissolveWidth: 0.2
-    - _SourceGlowDissolveFade: 1
+    - _SourceGlowDissolveFade: 1.2684
     - _SourceGlowDissolveInvert: 0
-    - _SourceGlowDissolveNoiseFactor: 0.2
+    - _SourceGlowDissolveNoiseFactor: 0.31
     - _SourceGlowDissolveWidth: 0.1
     - _SplitToningBalance: 1
     - _SplitToningContrast: 1
@@ -442,7 +442,7 @@ Material:
     - _SourceAlphaDissolveNoiseScale: {r: 0.3, g: 0.3, b: 0, a: 0}
     - _SourceAlphaDissolvePosition: {r: 0, g: 0, b: 0, a: 0}
     - _SourceGlowDissolveEdgeColor: {r: 11.98431, g: 0.627451, b: 0.627451, a: 0}
-    - _SourceGlowDissolveNoiseScale: {r: 0.3, g: 0.3, b: 0, a: 0}
+    - _SourceGlowDissolveNoiseScale: {r: 0.3, g: 0.1, b: 0, a: 0}
     - _SourceGlowDissolvePosition: {r: 0, g: 0, b: 0, a: 0}
     - _SplitToningHighlightsColor: {r: 1, g: 0.1, b: 0.1, a: 0}
     - _SplitToningShadowsColor: {r: 0.1, g: 0.4000002, b: 1, a: 0}

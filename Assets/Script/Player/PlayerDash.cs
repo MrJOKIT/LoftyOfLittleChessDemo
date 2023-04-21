@@ -22,7 +22,7 @@ public class PlayerDash : MonoBehaviour
     private int facingDirection = 1;
     
     private SoundManager _soundManager;
-    private PlayerController _playerController;
+    private PlayerMovement _playerMovement;
     private Rigidbody2D rb;
     private PlayerAnimation _playerAnimation;
     private Animator _animator;
@@ -43,7 +43,7 @@ public class PlayerDash : MonoBehaviour
     private void Start()
     {
         _soundManager = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<SoundManager>();
-        _playerController = GetComponent<PlayerController>();
+        _playerMovement = GetComponent<PlayerMovement>();
         _playerAnimation = GetComponent<PlayerAnimation>();
         _animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
@@ -55,11 +55,11 @@ public class PlayerDash : MonoBehaviour
     {
         Dash();
         CheckDash();
-        if (_playerController.IsLeft)
+        if (!_playerMovement.FacingRight)
         {
             facingDirection = -1;
         }
-        else if (!_playerController.IsLeft)
+        else if (_playerMovement.FacingRight)
         {
             facingDirection = 1;
         }
@@ -67,7 +67,7 @@ public class PlayerDash : MonoBehaviour
 
     private void AttempTodash()
     {
-        _animator.SetBool("IsDash",true);
+        _animator.SetBool("Dash",true);
         isDashing = true;
         dashTimeLeft = dashTime;
         lastDash = Time.time;
@@ -78,9 +78,8 @@ public class PlayerDash : MonoBehaviour
 
     private void Dash()
     {
-        if (Input.GetButtonDown("Dash") && canDash && _playerMana.Mp >= 0.2f) 
+        if (Input.GetButtonDown("Dash") && canDash && _playerMana.Mp >= 0.2f && _playerMovement.direction.x != 0) 
         {
-            
             if (Time.time >= (lastDash + dashCoolDown))
             {
                 _playerMana.Mp -= 0.2f;
@@ -95,8 +94,8 @@ public class PlayerDash : MonoBehaviour
         {
             if (dashTimeLeft > 0)
             {
-                _playerAnimation.State = PlayerAnimation.PlayerState.Dash;
-                _playerController.CanMove = false;
+                
+                _playerMovement.CanMove = false;
                 rb.velocity = new Vector2(dashSpeed * facingDirection, rb.velocity.y);
                 dashTimeLeft -= Time.deltaTime;
 
@@ -107,12 +106,12 @@ public class PlayerDash : MonoBehaviour
                 }
             }
 
-            if (dashTimeLeft <= 0 || _playerController.IsTouchingWall)
+            if (dashTimeLeft <= 0 )
             {
-                _animator.SetBool("IsDash",false);
+                _animator.SetBool("Dash",false);
                 rb.velocity = Vector2.zero;
                 isDashing = false;
-                _playerController.CanMove = true;
+                _playerMovement.CanMove = true;
             }
         }
     }
@@ -121,7 +120,7 @@ public class PlayerDash : MonoBehaviour
     {
         if (collision.collider.CompareTag("Enemy"))
         {
-            _animator.SetBool("IsDash",false);
+            _animator.SetBool("Dash",false);
             rb.velocity = Vector2.zero;
             isDashing = false;
             //_playerAnimation.State = PlayerAnimation.PlayerState.Hurt;

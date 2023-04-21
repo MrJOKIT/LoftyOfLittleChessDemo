@@ -8,7 +8,7 @@ public class Knockback : MonoBehaviour
     [SerializeField] private Transform _center;
     [SerializeField] private float _knockbackVel = 8f;
     [SerializeField] private float _knockbackTime = 1f;
-    [SerializeField] private bool _knockbacked;
+    //[SerializeField] private bool _knockbacked;
 
     private Rigidbody2D _rigidbody2D;
 
@@ -20,15 +20,15 @@ public class Knockback : MonoBehaviour
     public void KnockbackHit(Transform t)
     {
         var dir = _center.position - t.position;
-        _knockbacked = true;
+        //_knockbacked = true;
         _rigidbody2D.velocity = dir.normalized * _knockbackVel;
-        StartCoroutine(Unknockback());
+        //StartCoroutine(Unknockback());
     }
 
     private IEnumerator Unknockback()
     {
         yield return new WaitForSeconds(_knockbackTime);
-        _knockbacked = false;
+        //_knockbacked = false;
     }
 
 }

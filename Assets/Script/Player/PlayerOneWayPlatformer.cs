@@ -6,10 +6,21 @@ using UnityEngine;
 public class PlayerOneWayPlatformer : MonoBehaviour
 {
     private GameObject currentOneWayPlatformer;
+    [SerializeField] private Transform center;
     [SerializeField] private CapsuleCollider2D playerCollider;
 
     private void Update()
     {
+        RaycastHit2D oneWayPlatformer = Physics2D.Raycast(center.position, Vector2.down, 0.3f);
+        if (oneWayPlatformer.collider.gameObject.CompareTag("OneWayPlatform"))
+        {
+            currentOneWayPlatformer = oneWayPlatformer.collider.gameObject;
+        }
+        else
+        {
+            currentOneWayPlatformer = null;
+        }
+        
         if (Input.GetKeyDown(KeyCode.S))
         {
             if (currentOneWayPlatformer != null)
@@ -20,7 +31,7 @@ public class PlayerOneWayPlatformer : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter2D(Collision2D col)
+    /*private void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("OneWayPlatform"))
         {
@@ -34,7 +45,7 @@ public class PlayerOneWayPlatformer : MonoBehaviour
         {
             currentOneWayPlatformer = null;
         }
-    }
+    }*/
 
     private IEnumerator DisableCollision()
     {

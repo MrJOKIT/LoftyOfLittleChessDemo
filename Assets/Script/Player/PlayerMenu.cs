@@ -10,6 +10,9 @@ public class PlayerMenu : MonoBehaviour
     [SerializeField] private GameObject playerMenu;
     private bool _menuActive;
     private PlayerController _playerController;
+    private SoundManager soundManager;
+
+    [SerializeField] private Animator bookAnimator;
     //public GameObject menuPanel;
 
     
@@ -21,6 +24,7 @@ public class PlayerMenu : MonoBehaviour
     private void Start()
     {
         _playerController = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        soundManager = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<SoundManager>();
     }
 
     private void Update()
@@ -44,6 +48,7 @@ public class PlayerMenu : MonoBehaviour
 
     public void ReCheckPoint()
     {
+        SoundManager.instace.Play(SoundManager.SoundName.UIClick);
         _playerHealth.IsDead = false;
         _playerHealth.Health = _playerHealth.MaxHelath;
         Time.timeScale = 1f;
@@ -53,6 +58,7 @@ public class PlayerMenu : MonoBehaviour
     }
     public void GetExitPress()
     {
+        SoundManager.instace.Play(SoundManager.SoundName.UIClick);
         Time.timeScale = 1f;
         DataPersistenceManager.instance.SaveGame();
         SceneManager.LoadSceneAsync("MainMenu");
@@ -60,6 +66,7 @@ public class PlayerMenu : MonoBehaviour
 
     public void Option(GameObject optionPanel)
     {
+        SoundManager.instace.Play(SoundManager.SoundName.UIClick);
         _menuActive = false;
         playerMenu.SetActive(false);
         optionPanel.SetActive(true);
@@ -68,23 +75,23 @@ public class PlayerMenu : MonoBehaviour
     
     public void BackMenu(GameObject thisMenu)
     {
+        SoundManager.instace.Play(SoundManager.SoundName.UIClick);
         thisMenu.SetActive(false);
         
     }
     
     public void OpenMenu()
     {
-        Cursor.visible = false;
+        SoundManager.instace.Play(SoundManager.SoundName.BookOpen);
+        Cursor.visible = true;
         _menuActive = true;
-        playerMenu.SetActive(true);
-        //playerMenu.GetComponent<Animator>().SetBool("Open",true);
+        bookAnimator.SetBool("Open",true);
     }
 
     public void CloseMenu()
     {
         Cursor.visible = false;
         _menuActive = false;
-        playerMenu.SetActive(false);
-        //playerMenu.GetComponent<Animator>().SetBool("Open",false);
+        bookAnimator.SetBool("Open",false);
     }
 }

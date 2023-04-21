@@ -15,6 +15,7 @@ public class GameData
     public float maxUltimatePoint;
     public float ultimatePoint;
     public int deathCount;
+    public bool isKing;
     
 
     public GameData()
@@ -26,6 +27,7 @@ public class GameData
         this.maxUltimatePoint = 1;
         this.ultimatePoint = 0;
         this.deathCount = 0;
+        this.isKing = true;
         lastCheckPoint = Vector3.zero;
         
     }

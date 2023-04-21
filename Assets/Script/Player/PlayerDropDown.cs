@@ -26,10 +26,10 @@ public class PlayerDropDown : MonoBehaviour
 
     private void DropDownSkill()
     {
-        if (!_playerJump.IsGround && _playerJump.IsJump && Input.GetKeyDown(KeyCode.S))
+        /*if (!_playerJump.IsGround && _playerJump.IsJump && Input.GetKeyDown(KeyCode.DownArrow) || !_playerJump.IsGround && _playerJump.IsJump && Input.GetKeyDown(KeyCode.S))
         {
             StartCoroutine(DropDown());
-        }
+        }*/
     }
     
     private IEnumerator DropDown()

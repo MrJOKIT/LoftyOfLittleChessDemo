@@ -13,6 +13,14 @@ public class SoundManager : MonoBehaviour
                 Jump,
                 DoubleJump,
                 Dash,
+                BGM1,
+                BGM2,
+                Attack1,
+                ThrowSpear,
+                ChangeCharacter,
+                UIClick,
+                TakeUltimate,
+                BookOpen,
             }
         
             //How to use > SoundManager.instace.Play( SoundManager.SoundName.sound name); <//
@@ -42,7 +50,7 @@ public class SoundManager : MonoBehaviour
                 {
                     sound.audioSource = gameObject.AddComponent<AudioSource>();
     
-                    sound.audioSource.outputAudioMixerGroup = sound.AudioMixerGroup;
+                    sound.audioSource.outputAudioMixerGroup = sound.audioMixerGroup;
                     sound.audioSource.clip = sound.clip;
                     sound.audioSource.volume = sound.volume;
                     sound.audioSource.loop = sound.loop;

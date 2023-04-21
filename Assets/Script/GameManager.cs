@@ -12,11 +12,12 @@ public class GameManager : MonoBehaviour
     {
         
         Cursor.lockState = CursorLockMode.Confined;
-        player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        Screen.SetResolution(1920,1080,true);
+        
         if (!isMenu)
         {
             Cursor.visible = false;
-            player.GetComponent<PlayerController>().CanMove = true;
+            player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         }
 
     }

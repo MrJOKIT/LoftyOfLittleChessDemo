@@ -11,7 +11,7 @@ namespace Script.Sound
         public SoundManager.SoundName soundName;
         public AudioClip clip;
         [Range(0f,1f)]public float volume;
-        public AudioMixerGroup AudioMixerGroup;
+        public AudioMixerGroup audioMixerGroup;
         public bool loop;
         [HideInInspector]public AudioSource audioSource;
     }

@@ -7,10 +7,10 @@ public class PlayerCombat : MonoBehaviour
 {
     private Animator _animator;
     
-    private PlayerController _playerController;
+    private PlayerMovement _playerMovement;
     private PlayerHealth _playerHealth;
-    private PlayerJump _playerJump;
     private PlayerAnimation _playerAnimation;
+    private SoundManager soundManager;
 
     [SerializeField] private Transform vfxSlash;
     [SerializeField] private float attackDamage;
@@ -32,51 +32,51 @@ public class PlayerCombat : MonoBehaviour
     private void Start()
     {
         _animator = GetComponent<Animator>();
-        _playerController = GetComponent<PlayerController>();
+        _playerMovement = GetComponent<PlayerMovement>();
         _playerHealth = GetComponent<PlayerHealth>();
-        _playerJump = GetComponent<PlayerJump>();
         _playerAnimation = GetComponent<PlayerAnimation>();
+        soundManager = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<SoundManager>();
 
     }
 
     private void Update()
     {
-        if (_playerController.CanMove)
+        if (_playerMovement.CanMove)
         {
-            if (Input.GetMouseButtonDown(0) && !_playerJump.IsJump)
+            if (Input.GetKeyDown(KeyCode.J) )
             {
                 Attack();
             }
-            else if (Input.GetMouseButton(0) && !_playerJump.IsJump)
+            else if (Input.GetKey(KeyCode.K) )
             {
                 Counter();
             }
-            else if (Input.GetMouseButtonUp(0) && !_playerJump)
+            else if (Input.GetKeyUp(KeyCode.K) )
             {
                 _animator.SetBool("HeavyAttack",false);
             }
         }
 
-        if (!_playerController.CanMove && attack1)
+        if (!_playerMovement.CanMove && attack1)
         {
             timer = 0.38f;
             time += Time.deltaTime;
             if (time > timer)
             {
-                _playerController.CanMove = true;
-                _playerController.InCombat = false;
+                _playerMovement.CanMove = true;
+                _playerMovement.InCombat = false;
                 attack1 = false;
                 time = 0f;
             }
         }
-        else if (!_playerController.CanMove && attack2)
+        else if (!_playerMovement.CanMove && attack2)
         {
             timer = 0.4f;
             time += Time.deltaTime;
             if (time > timer)
             {
-                _playerController.CanMove = true;
-                _playerController.InCombat = false;
+                _playerMovement.CanMove = true;
+                _playerMovement.InCombat = false;
                 attack1 = false;
                 _animator.SetBool("HeavyAttack",false);
                 time = 0f;
@@ -87,12 +87,11 @@ public class PlayerCombat : MonoBehaviour
 
     private void Attack()
     {
-        
+        SoundManager.instace.Play(SoundManager.SoundName.Attack1);
         attack1 = true;
-        _playerController.CanMove = false;
-        _playerController.InCombat = true;
-        // Play an attack animation
-
+        _playerMovement.CanMove = false;
+        _playerMovement.InCombat = true;
+        
         _playerAnimation.State = PlayerAnimation.PlayerState.Attack;
         Instantiate(vfxSlash, attackPoint.transform.position,attackPoint.transform.rotation);
             
@@ -111,8 +110,8 @@ public class PlayerCombat : MonoBehaviour
     {
         
         attack2 = true;
-        _playerController.CanMove = false;
-        _playerController.InCombat = true;
+        _playerMovement.CanMove = false;
+        _playerMovement.InCombat = true;
         // Play an attack animation
 
         _playerAnimation.State = PlayerAnimation.PlayerState.HeavyAttack;

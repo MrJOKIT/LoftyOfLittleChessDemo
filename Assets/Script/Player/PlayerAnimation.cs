@@ -7,15 +7,12 @@ public class PlayerAnimation : MonoBehaviour
 {
     public enum PlayerState
     {
-        Idle,
-        Walk,
-        Fall,
-        Jump,
+        Dash,
         Dead,
         Hurt,
         Attack,
-        Dash,
         HeavyAttack,
+        OtherNull,
 
     }
 
@@ -40,25 +37,10 @@ public class PlayerAnimation : MonoBehaviour
 
     void Update()
     {
-        if (state == PlayerState.Idle)
+        if (state == PlayerState.Dash)
         {
             SetFalseAllAnimatorBoolean();
-            _animatorKing.SetBool("IsIdle",true);
-        }
-        else if (state == PlayerState.Walk)
-        {
-            SetFalseAllAnimatorBoolean();
-            _animatorKing.SetBool("IsWalking",true);
-        }
-        else if (state == PlayerState.Jump && !_playerJump.IsGround)
-        {
-            SetFalseAllAnimatorBoolean();
-            _animatorKing.SetBool("IsJumping",true);
-        }
-        else if (state == PlayerState.Fall && !_playerJump.IsGround)
-        {
-            SetFalseAllAnimatorBoolean();
-            _animatorKing.SetBool("IsFalling",true);
+            _animatorKing.SetBool("Dash",true);
         }
         else if (state == PlayerState.Attack)
         {
@@ -70,14 +52,6 @@ public class PlayerAnimation : MonoBehaviour
         {
             SetFalseAllAnimatorBoolean();
             _animatorKing.SetBool("HeavyAttack",true);
-            /*_animator.ResetTrigger("HeavyAttack");
-            _animator.SetTrigger("HeavyAttack");*/
-        }
-        else if (state == PlayerState.Dash)
-        {
-            SetFalseAllAnimatorBoolean();
-            _animatorKing.ResetTrigger("IsDashing");
-            _animatorKing.SetTrigger("IsDashing");
         }
         else if (state == PlayerState.Hurt)
         {
@@ -90,16 +64,17 @@ public class PlayerAnimation : MonoBehaviour
             SetFalseAllAnimatorBoolean();
             _animatorKing.SetBool("IsDead",true);
         }
+        else if (state == PlayerState.OtherNull)
+        {
+            SetFalseAllAnimatorBoolean();
+        }
     }
 
     public void SetFalseAllAnimatorBoolean()
     {
-        _animatorKing.SetBool("IsIdle",false);
-        _animatorKing.SetBool("IsWalking",false);
-        _animatorKing.SetBool("IsJumping",false);
-        _animatorKing.SetBool("IsFalling",false);
         _animatorKing.SetBool("HeavyAttack",false);
         _animatorKing.SetBool("IsDead",false);
         _animatorKing.SetBool("IsHurt",false);
+        _animatorKing.SetBool("Dash",false);
     }
 }

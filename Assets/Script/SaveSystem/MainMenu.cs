@@ -13,11 +13,13 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button continueGameButton;
     [SerializeField] private SaveSlotMenu saveSlotMenu;
     [SerializeField] private Button loadGameButton;
+    private SoundManager soundManager;
 
 
     private void Start()
     {
         DisableButtonsDependingOnData();
+        soundManager = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<SoundManager>();
     }
 
     private void DisableButtonsDependingOnData()
@@ -31,24 +33,28 @@ public class MainMenu : MonoBehaviour
 
     public void OpenSetting()
     {
+        SoundManager.instace.Play(SoundManager.SoundName.UIClick);
         settingPanel.SetActive(true);
         DeactivateMemu();
     }
 
     public void CloseSetting()
     {
+        SoundManager.instace.Play(SoundManager.SoundName.UIClick);
         settingPanel.SetActive(false);
         ActivateMemu();
     }
 
     public void ExitGame()
     {
+        SoundManager.instace.Play(SoundManager.SoundName.UIClick);
         Debug.Log("Exit the game");
         Application.Quit();
     }
 
     public void OnNewGameClicked()
     {
+        SoundManager.instace.Play(SoundManager.SoundName.UIClick);
         saveSlotMenu.ActivateMenu(false);
         this.DeactivateMemu();
 
@@ -56,6 +62,7 @@ public class MainMenu : MonoBehaviour
     
     public void OnLoadGameClicked()
     {
+        SoundManager.instace.Play(SoundManager.SoundName.UIClick);
         saveSlotMenu.ActivateMenu(true);
         this.DeactivateMemu();
 
@@ -63,6 +70,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnContinueClciked()
     {
+        SoundManager.instace.Play(SoundManager.SoundName.UIClick);
         //DisableMenuButton();
         DataPersistenceManager.instance.SaveGame();
         SceneManager.LoadSceneAsync("World");
@@ -82,5 +90,11 @@ public class MainMenu : MonoBehaviour
     public void DeactivateMemu()
     {
         this.gameObject.SetActive(false);
+    }
+
+    public void LoadScene(int sceneNumber)
+    {
+        SoundManager.instace.Play(SoundManager.SoundName.UIClick);
+        SceneManager.LoadSceneAsync(sceneNumber);
     }
 }

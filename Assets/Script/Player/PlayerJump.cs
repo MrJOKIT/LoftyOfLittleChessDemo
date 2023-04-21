@@ -5,17 +5,18 @@ using UnityEngine;
 
 public class PlayerJump : MonoBehaviour
 {
-    [Header("Jump Setting")]
+    /*[Header("Jump Setting")]
     [SerializeField] private float jumpForce;
 
     [SerializeField] private LayerMask groundMask;
     private bool canJump = false;
     private bool _isJumping = false;
     private bool _isDoubleJumping = false;
+    private bool _isDouble = false;
     private bool _isGrounded = false;
     private bool checkJumpBug = false;
     private bool fallingLong = false;
-    private bool jumpBug;
+    //private bool jumpBug;
     private Rigidbody2D rb;
     private Animator _animator;
     private PlayerController _playerController;
@@ -106,7 +107,7 @@ public class PlayerJump : MonoBehaviour
                     time = 0f;
                 }
             }
-            /*else if (_isJumping && !_isGrounded && !canJump && !_isDoubleJumping && !checkJumpBug)
+            else if (_isJumping && !_isGrounded && !canJump && !_isDoubleJumping && !checkJumpBug && !fallingLong)
             {
                 time = 5f;
                 time += Time.deltaTime;
@@ -119,7 +120,7 @@ public class PlayerJump : MonoBehaviour
                     _isDoubleJumping = false;
                     time = 0f;
                 }
-            }*/
+            }
             else if (!checkJumpBug && !fallingLong)
             {
                 time = 0f;
@@ -131,12 +132,12 @@ public class PlayerJump : MonoBehaviour
     void Jump()
     {
 
-        if (coyoteTimeCounter > 0f && canJump == true && _isDoubleJumping == false && jumpBufferCounter > 0f)
+        if (coyoteTimeCounter > 0f && canJump == true && _isDoubleJumping == false && jumpBufferCounter > 0f )
         {
             checkJumpBug = false;
             fallingLong = false;
             rb.gravityScale = 2;
-            jumpBug = true;
+            //jumpBug = true;
             canJump = false;
             _isJumping = true;
             _isDoubleJumping = true;
@@ -146,28 +147,32 @@ public class PlayerJump : MonoBehaviour
             
         }
         
-        else if (!_isGrounded && _isJumping == true && _isDoubleJumping == true && Input.GetKeyDown(KeyCode.W))
+        else if (!_isGrounded && !_isDouble && _isJumping == true && _isDoubleJumping == true && Input.GetKeyDown(KeyCode.UpArrow))
         {
             checkJumpBug = false;
             fallingLong = false;
             time = 0f;
             rb.gravityScale = 2;
-            jumpBug = true;
+            //jumpBug = true;
             _isDoubleJumping = false;
+            _isDouble = true;
             rb.velocity = Vector2.up * jumpForce;
             coyoteTimeCounter = 0f;
+            
             SoundManager.instace.Play(SoundManager.SoundName.DoubleJump);
         }
+        
         
 
         if (rb.velocity.y > 0 && !_playerDash.IsDashing)
         {
             _playerAnimation.State = PlayerAnimation.PlayerState.Jump;
         }
-        else if (rb.velocity.y < 0 && !_playerDash.IsDashing)
+        else if (rb.velocity.y < 0  && !_playerDash.IsDashing)
         {
             _playerAnimation.State = PlayerAnimation.PlayerState.Fall;
         }
+        
     }
     
     private void OnCollisionEnter2D(Collision2D col)
@@ -185,7 +190,8 @@ public class PlayerJump : MonoBehaviour
                 _isGrounded = true;
                 _isJumping = false;
                 _isDoubleJumping = false;
-                jumpBug = false;
+                _isDouble = false;
+                //jumpBug = false;
             }
         }
         
@@ -221,8 +227,9 @@ public class PlayerJump : MonoBehaviour
         _isGrounded = true;
         _isJumping = false;
         _isDoubleJumping = false;
-        jumpBug = false;
-    }
+        _isDouble = false;
+        //jumpBug = false;
+    }*/
 
 
 

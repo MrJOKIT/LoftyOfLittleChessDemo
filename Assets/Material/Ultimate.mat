@@ -98,7 +98,7 @@ Material:
     m_Floats:
     - PixelSnap: 0
     - _AddColorContrast: 0.5
-    - _AddColorFade: 0.4
+    - _AddColorFade: 0
     - _AddHueBrightness: 2
     - _AddHueContrast: 1
     - _AddHueFade: 1
@@ -267,7 +267,7 @@ Material:
     - _RainbowBrightness: 2
     - _RainbowContrast: 1
     - _RainbowDensity: 0.5
-    - _RainbowFade: 1
+    - _RainbowFade: 0
     - _RainbowNoiseFactor: 0.2
     - _RainbowSaturation: 1
     - _RainbowSpeed: 0.5

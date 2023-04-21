@@ -14,7 +14,8 @@ public class PlayerUltimate : MonoBehaviour
     [SerializeField] private float ultimatePoint;
     private PlayerController _playerController;
     private PlayerHealth _playerHealth;
-    [SerializeField] private Material material;
+    [SerializeField] private Material materialKing;
+    [SerializeField] private Material materialQueen;
     [SerializeField] private Material backMaterial;
     private int fadePropertyID;
     //private float time;
@@ -51,17 +52,20 @@ public class PlayerUltimate : MonoBehaviour
         queenUltimateImage.fillAmount = ultimatePoint;
 
         var currentFade = kingUltimateImage.fillAmount / 2.5f;
-        material.SetFloat("_AddColorFade",currentFade);
+        materialKing.SetFloat("_AddColorFade",currentFade);
+        materialQueen.SetFloat("_AddColorFade",currentFade);
         if (ultimatePoint >= 1)
         {
             ultimatePoint = 1f;
-            material.SetFloat("_RainbowFade",1f);
+            materialKing.SetFloat("_RainbowFade",1f);
+            materialQueen.SetFloat("_RainbowFade",1f);
             backMaterial.SetFloat("_GlitchFade",0.25f);
             //ultimateInput.text = "Q";
         }
         else
         {
-            material.SetFloat("_RainbowFade",0f);
+            materialKing.SetFloat("_RainbowFade",0f);
+            materialQueen.SetFloat("_RainbowFade",0f);
             backMaterial.SetFloat("_GlitchFade",0);
         }
 
