@@ -30,6 +30,9 @@ public class PlayerHealth : MonoBehaviour
 
     private float time;
     private float timer = 0.4f;
+
+    private float deadTime;
+    private float deadTimeCounter = 2;
     
     
     private void Start()
@@ -79,7 +82,14 @@ public class PlayerHealth : MonoBehaviour
     {
         if (health <= 0)
         {
+            isDead = true;
             Dead();
+        }
+        else
+        {
+            isDead = false;
+            deadTime = 0f;
+            _animator.SetBool("DeadSure",false);
         }
         
         if (isHurt)
@@ -101,19 +111,26 @@ public class PlayerHealth : MonoBehaviour
         if (!isDead)
         {
             _animator.SetTrigger("Dead");
+            _animator.SetBool("DeadSure",true);
             isDead = true;
         }
-        playerMenu.OpenMenu();
         _playerMovement.CanMove = false;
         _playerAnimation.State = PlayerAnimation.PlayerState.Dead;
+
+        deadTime += Time.deltaTime;
+        if (deadTime > deadTimeCounter)
+        {
+            playerMenu.OpenMenu();
+        }
     }
 
     public void PlayerTakeDamage(float damage)
     {
         if (!immortalPlayer)
         {
+            ShakeController.instance.StartShake(0.5f,0.25f);
             simpleFlash.Flash();
-            _animatorIcon.SetTrigger("Hurt");
+            _animator.SetBool("Hurt",true);
             //playerJump.SetToDefault();
             knockBack.KnockbackHit(transform);
             health -= damage;
@@ -149,7 +166,7 @@ public class PlayerHealth : MonoBehaviour
     private IEnumerator ImmortalTime()
     {
         yield return new WaitForSeconds(immortalTime);
-        _playerAnimation.State = PlayerAnimation.PlayerState.OtherNull;
+        _animator.SetBool("Hurt",false);
         immortalPlayer = false;
     }
 }

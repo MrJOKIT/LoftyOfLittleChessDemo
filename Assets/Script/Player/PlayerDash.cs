@@ -7,6 +7,7 @@ using UnityEngine;
 public class PlayerDash : MonoBehaviour
 {
     [Header("Dash System")] 
+    public LayerMask wallMask;
     private bool isDashing = false;
     private bool canDash = true;
 
@@ -67,6 +68,8 @@ public class PlayerDash : MonoBehaviour
 
     private void AttempTodash()
     {
+        SoundManager.instace.Play(SoundManager.SoundName.Dash);
+        _playerMovement.CreateDust();
         _animator.SetBool("Dash",true);
         isDashing = true;
         dashTimeLeft = dashTime;
@@ -125,6 +128,13 @@ public class PlayerDash : MonoBehaviour
             isDashing = false;
             //_playerAnimation.State = PlayerAnimation.PlayerState.Hurt;
             //playerHealth.IsHurt = true;
+        }
+
+        if (((1 << collision.gameObject.layer) & wallMask) != 0)
+        {
+            _animator.SetBool("Dash",false);
+            rb.velocity = Vector2.zero;
+            isDashing = false;
         }
     }
 }

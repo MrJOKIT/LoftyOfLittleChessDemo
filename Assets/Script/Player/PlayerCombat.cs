@@ -2,129 +2,135 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class PlayerCombat : MonoBehaviour
 {
+    public static PlayerCombat instance;
     private Animator _animator;
     
     private PlayerMovement _playerMovement;
-    private PlayerHealth _playerHealth;
-    private PlayerAnimation _playerAnimation;
-    private SoundManager soundManager;
+    private PlayerHealth playerHealth;
+    private Rigidbody2D rb;
+    
 
     [SerializeField] private Transform vfxSlash;
     [SerializeField] private float attackDamage;
     [SerializeField] private float attackRange = 0.5f;
     [SerializeField] private Transform attackPoint;
+
+    private bool delayAttack = false;
+    private float delayAttackTime;
+    public float delayAttackCounter;
+
+    public int combo;
+    public bool attacking;
+    public AudioMixerGroup audioMixer;
+    public AudioSource audioSource;
+    public AudioClip[] sound;
     
     public LayerMask enemyLayers;
-
-    private float time;
-    private float timer;
-
-    private bool attack1, attack2; 
+    
     
     public float AttackDamage
     {
         get { return attackDamage; }
         set { attackDamage = value; }
     }
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     private void Start()
     {
+        audioSource = gameObject.AddComponent<AudioSource>();
+        playerHealth = GetComponent<PlayerHealth>();
         _animator = GetComponent<Animator>();
         _playerMovement = GetComponent<PlayerMovement>();
-        _playerHealth = GetComponent<PlayerHealth>();
-        _playerAnimation = GetComponent<PlayerAnimation>();
-        soundManager = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<SoundManager>();
+        rb = GetComponent<Rigidbody2D>();
 
+    }
+
+    public void Start_Combo()
+    {
+        attacking = false;
+        if (combo < 2)
+        {
+            combo++;
+        }
+    }
+
+    public void Finish_Combo()
+    {
+        delayAttack = true;
+        _playerMovement.CanMove = true;
+        _animator.SetBool("IsAttack",false);
+        attacking = false;
+        combo = 0;
     }
 
     private void Update()
     {
-        if (_playerMovement.CanMove)
+
+        if (!playerHealth.IsDead)
         {
-            if (Input.GetKeyDown(KeyCode.J) )
-            {
-                Attack();
-            }
-            else if (Input.GetKey(KeyCode.K) )
-            {
-                Counter();
-            }
-            else if (Input.GetKeyUp(KeyCode.K) )
-            {
-                _animator.SetBool("HeavyAttack",false);
-            }
+            Combo();
         }
 
-        if (!_playerMovement.CanMove && attack1)
+        if (delayAttack)
         {
-            timer = 0.38f;
-            time += Time.deltaTime;
-            if (time > timer)
+            delayAttackTime += Time.deltaTime;
+            if (delayAttackTime >= delayAttackCounter )
             {
-                _playerMovement.CanMove = true;
-                _playerMovement.InCombat = false;
-                attack1 = false;
-                time = 0f;
-            }
-        }
-        else if (!_playerMovement.CanMove && attack2)
-        {
-            timer = 0.4f;
-            time += Time.deltaTime;
-            if (time > timer)
-            {
-                _playerMovement.CanMove = true;
-                _playerMovement.InCombat = false;
-                attack1 = false;
-                _animator.SetBool("HeavyAttack",false);
-                time = 0f;
+                delayAttack = false;
+                delayAttackTime = 0f;
             }
         }
         
+
     }
+    
 
-    private void Attack()
+    public void Combo()
     {
-        SoundManager.instace.Play(SoundManager.SoundName.Attack1);
-        attack1 = true;
-        _playerMovement.CanMove = false;
-        _playerMovement.InCombat = true;
-        
-        _playerAnimation.State = PlayerAnimation.PlayerState.Attack;
-        Instantiate(vfxSlash, attackPoint.transform.position,attackPoint.transform.rotation);
-            
-        // Detect enemies in range of attack
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position,attackRange,enemyLayers);
-            
-        // Damage them
-        foreach (Collider2D enemy in hitEnemies)
+        if (Input.GetKeyDown(KeyCode.J) && !attacking && _playerMovement.onGround )
         {
-            enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
-            
+            delayAttackTime = 0f;
+            rb.velocity = Vector2.zero;
+            attacking = true;
+            _playerMovement.CanMove = false;
+            _animator.SetBool("IsAttack",true);
+            _animator.SetTrigger("attack"+combo);
+            audioSource.outputAudioMixerGroup = audioMixer;
+            audioSource.clip = sound[combo];
+            audioSource.Play();
+            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+
+            // Damage them
+            foreach (Collider2D enemy in hitEnemies)
+            {
+                enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+            }
         }
-    }
-
-    private void Counter()
-    {
-        
-        attack2 = true;
-        _playerMovement.CanMove = false;
-        _playerMovement.InCombat = true;
-        // Play an attack animation
-
-        _playerAnimation.State = PlayerAnimation.PlayerState.HeavyAttack;
-        //Instantiate(vfxSlash, attackPoint.transform.position, attackPoint.transform.rotation);
-
-        // Detect enemies in range of attack
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
-
-        // Damage them
-        foreach (Collider2D enemy in hitEnemies)
+        else if (Input.GetKeyDown(KeyCode.J) && !attacking && !_playerMovement.onGround  && !delayAttack)
         {
-            enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
             
+            attacking = true;
+            _playerMovement.CanMove = false;
+            _animator.SetBool("IsAttack",true);
+            _animator.SetTrigger("attackAir"+combo);
+            audioSource.outputAudioMixerGroup = audioMixer;
+            audioSource.clip = sound[combo];
+            audioSource.Play();
+            Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+
+            // Damage them
+            foreach (Collider2D enemy in hitEnemies)
+            {
+                enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+            }
         }
     }
 
@@ -136,6 +142,11 @@ public class PlayerCombat : MonoBehaviour
         }
         
         Gizmos.DrawWireSphere(attackPoint.position,attackRange);
+    }
+
+    public void InstanceSfx()
+    {
+        Instantiate(vfxSlash, attackPoint.transform.position,attackPoint.transform.rotation);
     }
     
     

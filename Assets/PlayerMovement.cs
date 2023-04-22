@@ -3,22 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour{
+public class PlayerMovement : MonoBehaviour
+{
+    public static PlayerMovement instance;
+    public ParticleSystem dust;
     [Header("Horizontal Movement")]
     public float moveSpeed = 10f;
     public Vector2 direction;
     private bool facingRight = true;
-    private bool canMove = true;
+    public bool canMove = true;
     private bool inCombat = false;
 
     [Header("Vertical Movement")] 
     public float jumpSpeed = 15f;
     public float jumpDelay = 0.25f;
     public float jumpTimer;
+    
 
     [Header("Components")]
     private Rigidbody2D rb;
     private PlayerAnimation playerAnimation;
+    private SoundManager soundManager;
     private Animator animator;
 
     [Header("Physics")]
@@ -29,6 +34,7 @@ public class PlayerMovement : MonoBehaviour{
 
     [Header("Collision")] 
     public bool onGround = false;
+    public bool onPlatform = false;
     public float groundLength = 1.05f;
     public Vector3 colliderOffset;
     public LayerMask groundLayer;
@@ -52,11 +58,17 @@ public class PlayerMovement : MonoBehaviour{
         set { inCombat = value; }
     }
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         playerAnimation = GetComponent<PlayerAnimation>();
+        soundManager = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<SoundManager>();
     }
 
     void Update()
@@ -70,7 +82,7 @@ public class PlayerMovement : MonoBehaviour{
             StartCoroutine(JumpSqueeze(1.25f, 0.8f, 0.05f));
         }
         
-        if (Input.GetButtonDown("Jump") && onGround && canMove && !inCombat)
+        if (Input.GetButtonDown("Jump") && onGround && canMove && !inCombat || Input.GetButtonDown("Jump") && onPlatform && canMove && !inCombat)
         {
             jumpTimer = Time.time + jumpDelay;
         }
@@ -87,8 +99,7 @@ public class PlayerMovement : MonoBehaviour{
                 animator.SetBool("Jumping",false);
                 animator.SetBool("Idle",false);
             }
-
-            animator.SetBool("Idle",true);
+            
             animator.SetBool("Jumping",false);
             animator.SetBool("Falling",false);
             animator.SetFloat("Vertical",0f);
@@ -102,16 +113,14 @@ public class PlayerMovement : MonoBehaviour{
         direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
     }
     void FixedUpdate(){
-        if (!inCombat && canMove )
+
+        if (canMove)
         {
             MoveCharacter(direction.x);
-        }
-
-        
-        
-        if (jumpTimer > Time.time && onGround)
-        {
-            Jump();
+            if (jumpTimer > Time.time && onGround || jumpTimer > Time.time && onPlatform)
+            {
+                Jump();
+            }
         }
         modifyPhysics();
     }
@@ -131,8 +140,10 @@ public class PlayerMovement : MonoBehaviour{
         
     }
     
-    public void Jump()
+    private void Jump()
     {
+        CreateDust();
+        SoundManager.instace.Play(SoundManager.SoundName.Jump);
         animator.SetBool("Jumping",true);
         //playerAnimation.State = PlayerAnimation.PlayerState.Jump;
         rb.velocity = new Vector2(rb.velocity.x, 0);
@@ -171,12 +182,14 @@ public class PlayerMovement : MonoBehaviour{
         
     }
     void Flip(){
+        CreateDust();
         facingRight = !facingRight;
         transform.rotation = Quaternion.Euler(0, facingRight ? 0 : 180, 0);
     }
     
     IEnumerator JumpSqueeze(float xSqueeze, float ySqueeze, float seconds) 
     {
+        CreateDust();
         Vector3 originalSize = Vector3.one;
         Vector3 newSize = new Vector3(xSqueeze, ySqueeze, originalSize.z);
         float t = 0f;
@@ -201,5 +214,40 @@ public class PlayerMovement : MonoBehaviour{
         Gizmos.DrawLine(transform.position - colliderOffset,transform.position - colliderOffset + Vector3.down * groundLength);
     }
 
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("OneWayPlatform"))
+        {
+            if (direction.x == 0 && direction.y == 0 && rb.velocity.y >= 0 )
+            {
+                animator.SetBool("Idle",true);
+                animator.SetBool("Jumping",false);
+            }
+            else if(direction.x != 0 || direction.y != 0)
+            {
+                animator.SetBool("Jumping",false);
+                animator.SetBool("Idle",false);
+            }
+            
+            animator.SetBool("Jumping",false);
+            animator.SetBool("Falling",false);
+            animator.SetFloat("Vertical",0f);
+            onPlatform = true;
+            //rb.velocity = new Vector2(rb.velocity.x, 0f);
+        }
+    }
     
+    private void OnCollisionExit2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("OneWayPlatform"))
+        {
+            onPlatform = false;
+            //rb.velocity = new Vector2(rb.velocity.x, 0f);
+        }
+    }
+
+    public void CreateDust()
+    {
+        dust.Play();
+    }
 }

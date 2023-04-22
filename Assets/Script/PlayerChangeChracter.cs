@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class PlayerChangeChracter : MonoBehaviour
 {
+
+    public ParticleSystem changeEffect;
     [Header("Animator")]
     [SerializeField] private Animator kingAnimatorIcon;
     [SerializeField] private Animator queenAnimatorIcon;
@@ -35,6 +37,7 @@ public class PlayerChangeChracter : MonoBehaviour
     private PlayerController playerController;
     private PlayerMovement playerMovement;
     private SoundManager soundManager;
+    private SineMovement sineMovement;
 
     private float changeTime;
     [Header("Change Time")]
@@ -44,6 +47,11 @@ public class PlayerChangeChracter : MonoBehaviour
     [SerializeField] private TextMeshProUGUI countText;
     private int cooldown;
     private int i = 1;
+
+    [Header("Sine Move")] 
+    public Transform wrapQueen;
+    public float sineSpeed = 1f;
+    public float sineWave = 1f;
     
     
     private bool isKing;
@@ -60,6 +68,7 @@ public class PlayerChangeChracter : MonoBehaviour
         playerController = GetComponent<PlayerController>();
         playerAnimator = GetComponent<Animator>();
         playerHealth = GetComponent<PlayerHealth>();
+        sineMovement = GetComponent<SineMovement>();
         cooldown = Convert.ToInt32(changeTimeCounter);
         isKing = playerController.isKingController;
         soundManager = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<SoundManager>();
@@ -94,11 +103,12 @@ public class PlayerChangeChracter : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.C) && changeTime > changeTimeCounter)
         {
-            playerMovement.Jump();
+            changeEffect.Play();
             SoundManager.instace.Play(SoundManager.SoundName.ChangeCharacter);
             if (isKing)
             {
                 isKing = false;
+                //transform.position = wrapQueen.transform.position;
                 Instantiate(queenCutIn, cutInPos.position, Quaternion.identity,cutInPos);
                 changeTime = 0f;
                 i = 1;
@@ -118,7 +128,8 @@ public class PlayerChangeChracter : MonoBehaviour
         {
             /*playerMats.SetFloat("_SineMoveFade", 0f);
             playerMats.SetFloat("_SineMoveOffset", 0f);*/
-            //playerMovement.groundLength = 1.07f;
+            /*playerMovement.groundLength = 1.07f;
+            sineMovement.enabled = false;*/
             playerAnimator.SetLayerWeight(1,0f);
             playerAnimator.SetLayerWeight(2,1f);
             queenIcon.SetActive(false);
@@ -133,7 +144,8 @@ public class PlayerChangeChracter : MonoBehaviour
         else
         {
             /*playerMats.SetFloat("_SineMoveFade", 1f);*/
-            //playerMovement.groundLength = 1.5f;
+            /*playerMovement.groundLength = 1.5f;
+            sineMovement.enabled = false;*/
             playerAnimator.SetLayerWeight(2,0f);
             playerAnimator.SetLayerWeight(1,1f);
             kingIcon.SetActive(false);
