@@ -2,6 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -25,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     private PlayerAnimation playerAnimation;
     private SoundManager soundManager;
     private Animator animator;
+    [SerializeField] private Vignette vignette;
 
     [Header("Physics")]
     public float maxSpeed = 7f;
@@ -69,6 +73,7 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         playerAnimation = GetComponent<PlayerAnimation>();
         soundManager = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<SoundManager>();
+        
     }
 
     void Update()
@@ -249,5 +254,28 @@ public class PlayerMovement : MonoBehaviour
     public void CreateDust()
     {
         dust.Play();
+    }
+
+    public void OpenDialogue()
+    {
+        vignette.intensity.value = 0.7f;
+        rb.velocity = Vector2.zero;
+        direction = Vector2.zero;
+        animator.SetFloat("Horizontal",0);
+        animator.SetFloat("Vertical",0);
+        animator.SetBool("Jumping",false);
+        animator.SetBool("Falling",false);
+        animator.SetBool("Idle",true);
+        canMove = false;
+        
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
+    }
+
+    public void CloseDialogue()
+    {
+        canMove = true;
+        Cursor.visible = false;
+        vignette.intensity.value = 0.3f;
     }
 }

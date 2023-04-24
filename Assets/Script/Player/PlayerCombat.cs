@@ -55,6 +55,7 @@ public class PlayerCombat : MonoBehaviour
 
     public void Start_Combo()
     {
+        _playerMovement.canMove = true;
         attacking = false;
         if (combo < 2)
         {
@@ -95,7 +96,7 @@ public class PlayerCombat : MonoBehaviour
 
     public void Combo()
     {
-        if (Input.GetKeyDown(KeyCode.J) && !attacking && _playerMovement.onGround )
+        if (Input.GetKeyDown(KeyCode.J) && !attacking && _playerMovement.onGround && _playerMovement.canMove )
         {
             delayAttackTime = 0f;
             rb.velocity = Vector2.zero;
@@ -107,7 +108,6 @@ public class PlayerCombat : MonoBehaviour
             audioSource.clip = sound[combo];
             audioSource.Play();
             Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
-
             // Damage them
             foreach (Collider2D enemy in hitEnemies)
             {
@@ -125,7 +125,6 @@ public class PlayerCombat : MonoBehaviour
             audioSource.clip = sound[combo];
             audioSource.Play();
             Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
-
             // Damage them
             foreach (Collider2D enemy in hitEnemies)
             {

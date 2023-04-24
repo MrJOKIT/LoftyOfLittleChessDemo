@@ -17,7 +17,6 @@ public class PlayerHealth : MonoBehaviour
     private Animator _animator;
     private PlayerAnimation _playerAnimation;
     private InputManager _inputManager;
-    private Knockback knockBack;
     private PlayerJump playerJump;
     private SimpleFlash simpleFlash;
     private bool isDead = false;
@@ -42,7 +41,6 @@ public class PlayerHealth : MonoBehaviour
         _animator = GetComponent<Animator>();
         _playerAnimation = GetComponent<PlayerAnimation>();
         _inputManager = GetComponent<InputManager>();
-        knockBack = GetComponent<Knockback>();
         playerJump = GetComponent<PlayerJump>();
         simpleFlash = GetComponent<SimpleFlash>();
 
@@ -126,13 +124,12 @@ public class PlayerHealth : MonoBehaviour
 
     public void PlayerTakeDamage(float damage)
     {
-        if (!immortalPlayer)
+        if (!immortalPlayer && _playerMovement.canMove)
         {
             ShakeController.instance.StartShake(0.5f,0.25f);
             simpleFlash.Flash();
             _animator.SetBool("Hurt",true);
-            //playerJump.SetToDefault();
-            knockBack.KnockbackHit(transform);
+            _animatorIcon.SetTrigger("Hurt");
             health -= damage;
 
             _playerMovement.CanMove = false;
@@ -167,6 +164,7 @@ public class PlayerHealth : MonoBehaviour
     {
         yield return new WaitForSeconds(immortalTime);
         _animator.SetBool("Hurt",false);
+        _playerMovement.canMove = true;
         immortalPlayer = false;
     }
 }
