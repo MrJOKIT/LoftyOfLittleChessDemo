@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerOneWayPlatformer : MonoBehaviour
 {
     private GameObject currentOneWayPlatformer;
-    [SerializeField] private BoxCollider2D playerCollider;
+    [SerializeField] private CapsuleCollider2D playerCollider;
 
     private void Update()
     {

@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using TMPro;
 using Unity.Collections;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 using UnityEngine.UI;
@@ -24,6 +24,10 @@ public class PlayerController : MonoBehaviour, IDataPersistence
     public bool isKingController;
     private bool isGround;
 
+    [Header("Inventory")] 
+    public TextMeshProUGUI coinText;
+    private int coin;
+
     [Header("Ref")]
     private PlayerHealth _playerHealth;
     private PlayerMana _playerMana;
@@ -36,6 +40,12 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         get { return lastCheckPoint; }
         set { lastCheckPoint = value; }
     }
+
+    public int Coin
+    {
+        get { return coin; }
+        set { coin = value; }
+    }
     
     void Start()
     {
@@ -43,10 +53,13 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         _playerMana = GetComponent<PlayerMana>();
         _playerUltimate = GetComponent<PlayerUltimate>();
         playerChangeChracter = GetComponent<PlayerChangeChracter>();
-        
-
     }
-    
+
+    private void Update()
+    {
+        coinText.text = "" + coin;
+    }
+
     public void SaveData(GameData data)
     {
         data.maxHealthCount = _playerHealth.MaxHelath;
@@ -55,9 +68,12 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         data.mpCount = _playerMana.Mp;
         data.maxUltimatePoint = _playerUltimate.MaxUltimatePoint;
         data.ultimatePoint = _playerUltimate.UltimatePoint;
+        //แก้ตอนจะเปลื่ยนจากอิงตำแหน่งตาม CheckPoint
         data.lastCheckPoint = transform.position;
+        //แก้ตอนจะเปลื่ยนจากอิงตำแหน่งตาม CheckPoint
         data.deathCount = _playerHealth.DeathCount;
         data.isKing = playerChangeChracter.IsKing;
+        data.coin = coin;
     }
     public void LoadData(GameData data)
     {
@@ -70,6 +86,7 @@ public class PlayerController : MonoBehaviour, IDataPersistence
         transform.position = data.lastCheckPoint;
         deathCount = data.deathCount;
         this.isKingController = data.isKing;
+        coin = data.coin;
     }
     
     

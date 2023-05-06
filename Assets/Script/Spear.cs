@@ -6,6 +6,7 @@ using UnityEngine;
 public class Spear : MonoBehaviour
 {
     public float speed = 20f;
+    public float damage;
     public LayerMask pinLayer;
     private Rigidbody2D rb;
     private float time;
@@ -36,6 +37,11 @@ public class Spear : MonoBehaviour
         else if (col.gameObject.CompareTag("Player"))
         {
             return;
+        }
+        else if (col.gameObject.CompareTag("Enemy"))
+        {
+            col.gameObject.GetComponent<Enemy>().TakeDamage(damage);
+            Destroy(gameObject);
         }
         else
         {

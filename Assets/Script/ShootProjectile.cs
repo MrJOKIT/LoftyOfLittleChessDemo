@@ -23,7 +23,7 @@ public class ShootProjectile : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I) && playerMana.Mp >= throwCost && playerMovement.canMove) 
+        if (Input.GetKeyDown(KeyCode.I) && playerMana.Mp >= throwCost && playerMovement.CanMove) 
         {
             playerMana.Mp -= throwCost;
             LaunchProjectile();

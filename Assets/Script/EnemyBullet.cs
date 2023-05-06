@@ -5,15 +5,20 @@ using UnityEngine;
 
 public class EnemyBullet : MonoBehaviour
 {
-    private Transform sfx;
+    public Transform sfx;
+    public float damage;
     public LayerMask destroyMask;
     private void OnTriggerEnter2D(Collider2D col)
     {
         if (col.CompareTag("Player"))
         {
-            col.gameObject.GetComponent<PlayerHealth>().PlayerTakeDamage(10);
+            col.gameObject.GetComponent<PlayerHealth>().PlayerTakeDamage(damage);
             Instantiate(sfx, transform.position, Quaternion.identity);
             Destroy(gameObject);
+        }
+        else if (col.CompareTag("Enemy"))
+        {
+            return;
         }
         else
         {

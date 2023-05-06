@@ -7,9 +7,14 @@ using UnityEngine;
 public class PlayerDash : MonoBehaviour
 {
     [Header("Dash System")] 
+    public LayerMask playerLayer;
+    public LayerMask enemyLayer;
+    public float wallCheck;
     public LayerMask wallMask;
     private bool isDashing = false;
     private bool canDash = true;
+    private bool isWall;
+    public Transform wallCheckPos;
 
     private float dashTimeLeft;
     private float lastImageXpos;
@@ -54,20 +59,24 @@ public class PlayerDash : MonoBehaviour
 
     private void Update()
     {
+        isWall = Physics2D.Raycast(wallCheckPos.position, Vector2.right, wallCheck,wallMask);
         Dash();
         CheckDash();
         if (!_playerMovement.FacingRight)
         {
             facingDirection = -1;
+            wallCheck = -1f;
         }
         else if (_playerMovement.FacingRight)
         {
             facingDirection = 1;
+            wallCheck = 1f;
         }
     }
 
     private void AttempTodash()
     {
+        Physics2D.IgnoreLayerCollision(7,10,true);
         SoundManager.instace.Play(SoundManager.SoundName.Dash);
         _playerMovement.CreateDust();
         _animator.SetBool("Dash",true);
@@ -98,7 +107,6 @@ public class PlayerDash : MonoBehaviour
             if (dashTimeLeft > 0)
             {
                 
-                _playerMovement.CanMove = false;
                 rb.velocity = new Vector2(dashSpeed * facingDirection, rb.velocity.y);
                 dashTimeLeft -= Time.deltaTime;
 
@@ -107,10 +115,14 @@ public class PlayerDash : MonoBehaviour
                     PlayerAfterImagePool.instance.GetFromPool();
                     lastImageXpos = transform.position.x;
                 }
+                
+                
             }
 
-            if (dashTimeLeft <= 0 )
+            
+            if (dashTimeLeft <= 0 || isWall)
             {
+                Physics2D.IgnoreLayerCollision(7, 10, false);
                 _animator.SetBool("Dash",false);
                 rb.velocity = Vector2.zero;
                 isDashing = false;
@@ -119,11 +131,18 @@ public class PlayerDash : MonoBehaviour
         }
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawRay(wallCheckPos.position,Vector3.right * wallCheck);
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("Enemy"))
         {
             _animator.SetBool("Dash",false);
+            dashTimeLeft = 0;
             rb.velocity = Vector2.zero;
             isDashing = false;
             //_playerAnimation.State = PlayerAnimation.PlayerState.Hurt;
@@ -133,6 +152,7 @@ public class PlayerDash : MonoBehaviour
         if (((1 << collision.gameObject.layer) & wallMask) != 0)
         {
             _animator.SetBool("Dash",false);
+            dashTimeLeft = 0;
             rb.velocity = Vector2.zero;
             isDashing = false;
         }

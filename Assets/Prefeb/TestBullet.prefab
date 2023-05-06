@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 2628694496134104893}
   - component: {fileID: 2628694496134104865}
   - component: {fileID: 2628694496134104870}
-  - component: {fileID: -4190488249119443978}
   m_Layer: 10
   m_Name: TestBullet
   m_TagString: Untagged
@@ -138,6 +137,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e4eef4f574e29c47bd99aedb271363c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sfx: {fileID: 6998337817264241729, guid: 7b682c99b222d5a4cb2e7ee2b77750a4, type: 3}
+  damage: 30
   destroyMask:
     serializedVersion: 2
     m_Bits: 2147483647
@@ -157,18 +158,3 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.19
---- !u!114 &-4190488249119443978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2628694496134104892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c00a73bb044b51d4aa0eddc59ddfe752, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 10
-  currentHealth: 0
-  isEnemy: 0

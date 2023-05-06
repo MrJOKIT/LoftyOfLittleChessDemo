@@ -60,19 +60,20 @@ public class PlayerUltimate : MonoBehaviour
             materialKing.SetFloat("_RainbowFade",1f);
             materialQueen.SetFloat("_RainbowFade",1f);
             backMaterial.SetFloat("_GlitchFade",0.25f);
-            //ultimateInput.text = "Q";
+            ultimateInput.text = "Q";
         }
         else
         {
             materialKing.SetFloat("_RainbowFade",0f);
             materialQueen.SetFloat("_RainbowFade",0f);
             backMaterial.SetFloat("_GlitchFade",0);
+            ultimateInput.text = "";
         }
 
         if (ultimatePoint >= 1 && Input.GetKeyDown(KeyCode.Q))
         {
             ultimatePoint = 0;
-            _playerHealth.PlayerTakeHealth(10);
+            _playerHealth.PlayerTakeHealth(50);
             Debug.Log("Ultimate Skill!!!!");
         }
         else if (ultimatePoint > 1)

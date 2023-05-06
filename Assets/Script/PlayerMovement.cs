@@ -14,21 +14,36 @@ public class PlayerMovement : MonoBehaviour
     public float moveSpeed = 10f;
     public Vector2 direction;
     private bool facingRight = true;
-    public bool canMove = true;
+    private bool canMove = true;
     private bool inCombat = false;
 
     [Header("Vertical Movement")] 
     public float jumpSpeed = 15f;
     public float jumpDelay = 0.25f;
     public float jumpTimer;
-    
 
+    [Header("Wall Slide")]
+    public Transform wallCheck;
+    public float maxWallSlideVelocity;
+    public float wallCheckDistance;
+    private bool isWallSliding = false;
+    private bool isGrabbing;
+    private RaycastHit2D wallCheckHit;
+
+    [Header("Wall Jump")] 
+    private bool isWallJumping;
+    private float wallJumpingDirection;
+    private float wallJumpingTime = 0.2f;
+    private float wallJumpingCounter;
+    private float wallJumpingDuration = 0.4f;
+    private Vector2 wallJumpingPower = new Vector2(8f, 16f);
+    
     [Header("Components")]
     private Rigidbody2D rb;
     private PlayerAnimation playerAnimation;
     private SoundManager soundManager;
     private Animator animator;
-    [SerializeField] private Vignette vignette;
+    
 
     [Header("Physics")]
     public float maxSpeed = 7f;
@@ -86,7 +101,17 @@ public class PlayerMovement : MonoBehaviour
         {
             StartCoroutine(JumpSqueeze(1.25f, 0.8f, 0.05f));
         }
+        //Check if grabbing
+        if (Input.GetButton("Horizontal"))
+        {
+            isGrabbing = true;
+        }
+        else
+        {
+            isGrabbing = false;
+        }
         
+        WallJump();
         if (Input.GetButtonDown("Jump") && onGround && canMove && !inCombat || Input.GetButtonDown("Jump") && onPlatform && canMove && !inCombat)
         {
             jumpTimer = Time.time + jumpDelay;
@@ -112,14 +137,30 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (rb.velocity.y < 0)
         {
-            animator.SetBool("Falling",true);
+            animator.SetBool("Falling", true);
+        }
+
+        if (wallCheckHit && rb.velocity.y <= 0 && !onGround && isGrabbing)
+        {
+            isWallSliding = true;
+        }
+        else
+        {
+            isWallSliding = false;
         }
         
         direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
     }
-    void FixedUpdate(){
+    void FixedUpdate()
+    {
 
-        if (canMove)
+        wallCheckHit = Physics2D.Raycast(wallCheck.position,wallCheck.right,wallCheckDistance,groundLayer);
+
+        if (wallCheckHit)
+        {
+            Debug.Log("Is touching ground");
+        }
+        if (canMove && !isWallJumping)
         {
             MoveCharacter(direction.x);
             if (jumpTimer > Time.time && onGround || jumpTimer > Time.time && onPlatform)
@@ -128,11 +169,20 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         modifyPhysics();
+        
+        //Clamp y velocity
+        if (isWallSliding)
+        {
+            if (rb.velocity.y < maxWallSlideVelocity)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, -maxWallSlideVelocity);
+            }
+        }
     }
     void MoveCharacter(float horizontal){
         rb.AddForce(Vector2.right * horizontal * moveSpeed);
 
-        if((horizontal > 0 && !facingRight) || (horizontal < 0 && facingRight))
+        if(horizontal > 0 && !facingRight && !isWallJumping ||horizontal < 0 && facingRight && !isWallJumping)
         {
             Flip();
         }
@@ -191,6 +241,44 @@ public class PlayerMovement : MonoBehaviour
         facingRight = !facingRight;
         transform.rotation = Quaternion.Euler(0, facingRight ? 0 : 180, 0);
     }
+
+    private void WallJump()
+    {
+        if (isWallSliding)
+        {
+            isWallJumping = false;
+            wallJumpingDirection = direction.x * -1;
+            wallJumpingCounter = wallJumpingTime;
+            
+            CancelInvoke(nameof(StopWallJumping));
+        }
+        else
+        {
+            wallJumpingCounter -= Time.deltaTime;
+        }
+
+        if (Input.GetButtonDown("Jump") && wallJumpingCounter > 0f)
+        {
+            isWallJumping = true;
+            rb.velocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
+            wallJumpingCounter = 0f;
+
+            if (direction.x != wallJumpingDirection)
+            {
+                facingRight = !facingRight;
+                transform.rotation = Quaternion.Euler(0, facingRight ? 0 : 180, 0);
+                direction.x *= -1f;
+            }
+            
+            Invoke(nameof(StopWallJumping),wallJumpingDuration);
+        }
+    }
+
+    private void StopWallJumping()
+    {
+        isWallJumping = false;
+    }
+    
     
     IEnumerator JumpSqueeze(float xSqueeze, float ySqueeze, float seconds) 
     {
@@ -258,7 +346,6 @@ public class PlayerMovement : MonoBehaviour
 
     public void OpenDialogue()
     {
-        vignette.intensity.value = 0.7f;
         rb.velocity = Vector2.zero;
         direction = Vector2.zero;
         animator.SetFloat("Horizontal",0);
@@ -271,11 +358,11 @@ public class PlayerMovement : MonoBehaviour
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
     }
+    
 
     public void CloseDialogue()
     {
         canMove = true;
         Cursor.visible = false;
-        vignette.intensity.value = 0.3f;
     }
 }

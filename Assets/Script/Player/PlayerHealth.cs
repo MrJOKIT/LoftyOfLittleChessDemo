@@ -36,6 +36,7 @@ public class PlayerHealth : MonoBehaviour
     
     private void Start()
     {
+        deadTime = 0f;
         _playerMovement = GetComponent<PlayerMovement>();
         _playerController = GetComponent<PlayerController>();
         _animator = GetComponent<Animator>();
@@ -106,12 +107,8 @@ public class PlayerHealth : MonoBehaviour
     
     private void Dead()
     {
-        if (!isDead)
-        {
-            _animator.SetTrigger("Dead");
-            _animator.SetBool("DeadSure",true);
-            isDead = true;
-        }
+        
+        _animator.SetBool("DeadSure",true);
         _playerMovement.CanMove = false;
         _playerAnimation.State = PlayerAnimation.PlayerState.Dead;
 
@@ -119,12 +116,13 @@ public class PlayerHealth : MonoBehaviour
         if (deadTime > deadTimeCounter)
         {
             playerMenu.OpenMenu();
+            
         }
     }
 
     public void PlayerTakeDamage(float damage)
     {
-        if (!immortalPlayer && _playerMovement.canMove)
+        if (!immortalPlayer && _playerMovement.CanMove)
         {
             ShakeController.instance.StartShake(0.5f,0.25f);
             simpleFlash.Flash();
@@ -132,11 +130,15 @@ public class PlayerHealth : MonoBehaviour
             _animatorIcon.SetTrigger("Hurt");
             health -= damage;
 
-            _playerMovement.CanMove = false;
-            _playerAnimation.State = PlayerAnimation.PlayerState.Hurt;
+            //_playerMovement.CanMove = false;
+            //_playerAnimation.State = PlayerAnimation.PlayerState.Hurt;
             isHurt = true;
             immortalPlayer = true;
             StartCoroutine(ImmortalTime());
+            if (health <= 0)
+            {
+                _animator.SetTrigger("Dead");
+            }
         }
     }
 
@@ -164,7 +166,7 @@ public class PlayerHealth : MonoBehaviour
     {
         yield return new WaitForSeconds(immortalTime);
         _animator.SetBool("Hurt",false);
-        _playerMovement.canMove = true;
+        _playerMovement.CanMove = true;
         immortalPlayer = false;
     }
 }

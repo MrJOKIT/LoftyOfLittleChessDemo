@@ -11,7 +11,7 @@ public class CameraController : MonoBehaviour
     
     private void Update()
     {
-        Vector3 newPos = new Vector3(target.position.x, target.position.y + yOffset, -10f);
+        Vector3 newPos = new Vector3(target.position.x , yOffset, -10f);
         transform.position = Vector3.Slerp(transform.position, newPos, followSpeed * Time.deltaTime);
         transform.rotation = Quaternion.identity;
     }

@@ -16,10 +16,13 @@ public class GameData
     public float ultimatePoint;
     public int deathCount;
     public bool isKing;
+    public int coin;
+    
     
 
     public GameData()
     {
+        this.coin = 0;
         this.maxHealthCount = 100;
         this.healthCount = 100;
         this.maxMpCount = 1;

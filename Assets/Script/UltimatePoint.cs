@@ -6,10 +6,13 @@ using UnityEngine;
 public class UltimatePoint : MonoBehaviour
 {
     private SoundManager soundManager;
+    private Rigidbody2D rb;
 
     private void Start()
     {
         soundManager = GameObject.FindGameObjectWithTag("SoundManager").GetComponent<SoundManager>();
+        rb = GetComponent<Rigidbody2D>();
+        rb.velocity = Vector2.up * 2f;
     }
 
     private void OnTriggerEnter2D(Collider2D col)

@@ -55,7 +55,7 @@ public class PlayerCombat : MonoBehaviour
 
     public void Start_Combo()
     {
-        _playerMovement.canMove = true;
+        //_playerMovement.canMove = true;
         attacking = false;
         if (combo < 2)
         {
@@ -66,7 +66,7 @@ public class PlayerCombat : MonoBehaviour
     public void Finish_Combo()
     {
         delayAttack = true;
-        _playerMovement.CanMove = true;
+        //_playerMovement.CanMove = true;
         _animator.SetBool("IsAttack",false);
         attacking = false;
         combo = 0;
@@ -96,12 +96,12 @@ public class PlayerCombat : MonoBehaviour
 
     public void Combo()
     {
-        if (Input.GetKeyDown(KeyCode.J) && !attacking && _playerMovement.onGround && _playerMovement.canMove )
+        if (Input.GetKeyDown(KeyCode.J) && !attacking && _playerMovement.onGround && _playerMovement.CanMove )
         {
             delayAttackTime = 0f;
             rb.velocity = Vector2.zero;
             attacking = true;
-            _playerMovement.CanMove = false;
+            //_playerMovement.CanMove = false;
             _animator.SetBool("IsAttack",true);
             _animator.SetTrigger("attack"+combo);
             audioSource.outputAudioMixerGroup = audioMixer;
@@ -118,7 +118,7 @@ public class PlayerCombat : MonoBehaviour
         {
             
             attacking = true;
-            _playerMovement.CanMove = false;
+            //_playerMovement.CanMove = false;
             _animator.SetBool("IsAttack",true);
             _animator.SetTrigger("attackAir"+combo);
             audioSource.outputAudioMixerGroup = audioMixer;
